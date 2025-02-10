@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class GameManager : SingletonManager<GameManager>
 {
+    [Header("UI")]
+    [SerializeField] private PointToClick m_pointToClickPrefab;
+    private PointToClick m_pointToClick;
+
+
     [SerializeField]
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
@@ -59,6 +64,12 @@ public class GameManager : SingletonManager<GameManager>
 
     private void HandleClickOnUnit(Unit unit)
     {
+        if (unit == m_activeUnit)
+        {
+            DeselectUnit(unit);
+            return;
+        }
+
         SelectNewUnit(unit);
     }
 
@@ -66,8 +77,16 @@ public class GameManager : SingletonManager<GameManager>
     {
         if (m_hasActiveUnit)
         {
+            DisplayClickEffect(position);
             m_activeUnit.MoveTo(position);
         }
+    }
+
+    private void DisplayClickEffect(Vector2 position)
+    {
+        if (m_pointToClick == null) m_pointToClick = Instantiate(m_pointToClickPrefab);
+
+        m_pointToClick.DisplayAt(position);
     }
 
     private void SelectNewUnit(Unit unit)
@@ -80,4 +99,11 @@ public class GameManager : SingletonManager<GameManager>
         m_activeUnit = unit;
         m_activeUnit.Select();
     }
+
+    private void DeselectUnit(Unit unit)
+    {
+        m_activeUnit.Deselect();
+        m_activeUnit = null;
+    }
+
 }

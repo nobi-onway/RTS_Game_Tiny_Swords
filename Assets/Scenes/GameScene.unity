@@ -4987,7 +4987,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000001130f064
+  m_ApplyToSortingLayers: 000000001130f0642319d160
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -5511,7 +5511,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6085474df2cff64f9842dc0e8e5d35e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_highlightMaterial: {fileID: 2100000, guid: 27e95f8ce0635c045beba923eb415646, type: 2}
 --- !u!70 &1138707539
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -7586,6 +7585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f52b4977bd82c314ba0d8c2ef7b735a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_pointToClickPrefab: {fileID: 7381846992925795592, guid: b81c6c16a1160f346b393bba39c29e6b, type: 3}
   m_activeUnit: {fileID: 0}
 --- !u!4 &1984352954
 Transform:
@@ -7740,7 +7740,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6085474df2cff64f9842dc0e8e5d35e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_highlightMaterial: {fileID: 2100000, guid: 27e95f8ce0635c045beba923eb415646, type: 2}
 --- !u!70 &1996004661
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
