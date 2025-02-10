@@ -7,6 +7,11 @@ public class HumanoidUnit : Unit
 
     private float m_currentSpeed => m_velocity.magnitude;
 
+    private void Start()
+    {
+        m_lastPos = transform.position;
+    }
+
     private void FixedUpdate()
     {
         m_velocity = new Vector2(

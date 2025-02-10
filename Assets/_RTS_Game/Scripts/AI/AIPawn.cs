@@ -7,11 +7,6 @@ public class AIPawn : MonoBehaviour
 
     private Vector3? m_destination;
 
-    private void Start()
-    {
-        m_destination = new Vector3(4f, 4f);
-    }
-
     private void Update()
     {
         if (m_destination.HasValue)
@@ -21,5 +16,10 @@ public class AIPawn : MonoBehaviour
 
             m_destination = Vector2.Distance(m_destination.Value, transform.position) > 0.1f ? m_destination : null;
         }
+    }
+
+    public void SetDestination(Vector3 destination)
+    {
+        m_destination = destination;
     }
 }
