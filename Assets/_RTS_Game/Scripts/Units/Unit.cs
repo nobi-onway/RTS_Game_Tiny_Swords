@@ -2,12 +2,16 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
+    [SerializeField] private ActionSO[] m_actionSOArray;
+
     private Material m_highlightMaterial;
     private Material m_originalMaterial;
 
     protected Animator animator;
     protected AIPawn AIPawn;
     protected SpriteRenderer spriteRenderer;
+
+    public ActionSO[] ActionSOArray => m_actionSOArray;
 
     private void Awake()
     {
@@ -18,7 +22,7 @@ public abstract class Unit : MonoBehaviour
         m_originalMaterial = spriteRenderer.material;
         m_highlightMaterial = Resources.Load<Material>("Materials/Outline_Material");
     }
-    private void SetUpComponent<T>(ref T component) where T : Component
+    protected void SetUpComponent<T>(ref T component) where T : Component
     {
         if (!TryGetComponent(out T componentTryToGet)) return;
 

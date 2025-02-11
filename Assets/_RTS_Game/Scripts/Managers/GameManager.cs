@@ -1,92 +1,33 @@
+using System;
 using UnityEngine;
 
 public class GameManager : SingletonManager<GameManager>
 {
-    [Header("UI")]
-    [SerializeField] private PointToClick m_pointToClickPrefab;
-    private PointToClick m_pointToClick;
-
-
-    [SerializeField]
+    #region Unit
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
 
-    private Vector2 m_initialTouchPosition;
+    public event Action<Vector2> OnMoveActiveUnit;
+    public event Action<Unit> OnSelectUnit;
+    public event Action OnDeselectUnit;
+    #endregion
 
-    private bool m_isBeginTouch => Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
-    private bool m_isEndTouch => Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended);
-
-    private void Update()
+    public void MoveActiveUnitTo(Vector2 position)
     {
-        Vector2 inputPosition = Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition;
+        if (!m_hasActiveUnit) return;
 
-        if (m_isBeginTouch)
-        {
-            m_initialTouchPosition = inputPosition;
-        }
-
-        if (m_isEndTouch)
-        {
-            if (Vector2.Distance(m_initialTouchPosition, inputPosition) < 10)
-            {
-                DetectClick(inputPosition);
-            }
-        }
+        m_activeUnit.MoveTo(position);
+        OnMoveActiveUnit?.Invoke(position);
     }
-
-    private void DetectClick(Vector2 inputPosition)
-    {
-        Vector2 worldPosition = Camera.main.ScreenToWorldPoint(inputPosition);
-        RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
-
-        if (HasClickOnUnit(hit, out Unit clickedUnit))
-        {
-            HandleClickOnUnit(clickedUnit);
-        }
-        else
-        {
-            HandleClickOnGround(worldPosition);
-        }
-
-    }
-
-    private bool HasClickOnUnit(RaycastHit2D hit, out Unit unit)
-    {
-        if (hit.collider != null && hit.collider.TryGetComponent(out Unit clickedUnit))
-        {
-            unit = clickedUnit;
-            return true;
-        }
-
-        unit = null;
-        return false;
-    }
-
-    private void HandleClickOnUnit(Unit unit)
+    public void SelectUnit(Unit unit)
     {
         if (unit == m_activeUnit)
         {
-            DeselectUnit(unit);
+            CancelActiveUnit();
             return;
         }
 
         SelectNewUnit(unit);
-    }
-
-    private void HandleClickOnGround(Vector2 position)
-    {
-        if (m_hasActiveUnit)
-        {
-            DisplayClickEffect(position);
-            m_activeUnit.MoveTo(position);
-        }
-    }
-
-    private void DisplayClickEffect(Vector2 position)
-    {
-        if (m_pointToClick == null) m_pointToClick = Instantiate(m_pointToClickPrefab);
-
-        m_pointToClick.DisplayAt(position);
     }
 
     private void SelectNewUnit(Unit unit)
@@ -96,14 +37,21 @@ public class GameManager : SingletonManager<GameManager>
             m_activeUnit.Deselect();
         }
 
-        m_activeUnit = unit;
+        SetActiveUnit(unit);
         m_activeUnit.Select();
     }
 
-    private void DeselectUnit(Unit unit)
+    private void CancelActiveUnit()
     {
         m_activeUnit.Deselect();
-        m_activeUnit = null;
+        SetActiveUnit(null);
     }
 
+    private void SetActiveUnit(Unit unit)
+    {
+        m_activeUnit = unit;
+
+        if (m_activeUnit != null) OnSelectUnit?.Invoke(unit);
+        if (m_activeUnit == null) OnDeselectUnit?.Invoke();
+    }
 }
