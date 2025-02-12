@@ -7,10 +7,8 @@ public class UIManager : SingletonManager<UIManager>
     [SerializeField] private ActionBar m_actionBar;
     private PointToClick m_pointToClick;
 
-    protected override void Awake()
+    private void Start()
     {
-        base.Awake();
-
         GameManager.Instance.OnMoveActiveUnit += DisplayClickEffect;
         GameManager.Instance.OnDeselectUnit += HideActionBar;
         GameManager.Instance.OnSelectUnit += ShowActionBar;

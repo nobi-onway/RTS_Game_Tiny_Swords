@@ -9,7 +9,19 @@ public class BuildActionSO : ActionSO
 
     public override void Execute()
     {
+        GameManager.Instance.PlaceActiveBuildingUnit();
+    }
+
+    public override void PrepareExecute()
+    {
         BuildingUnit buildingUnit = new GameObject(m_buildingSO.name).AddComponent<BuildingUnit>();
-        buildingUnit.SetUpBySO(m_buildingSO);
+        buildingUnit.SetUpBySO(
+            m_buildingSO,
+            GameManager.Instance.WalkableTilemap,
+            GameManager.Instance.OverlayTilemap,
+            GameManager.Instance.UnreachableTilemap
+        );
+
+        GameManager.Instance.SelectNewBuildingUnit(buildingUnit);
     }
 }

@@ -1,9 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ActionButton : MonoBehaviour
+public class ActionButton : ActionCard
 {
-    [SerializeField] private Image m_icon;
     [SerializeField] private Button m_button;
 
     private void OnDestroy()
@@ -11,9 +10,10 @@ public class ActionButton : MonoBehaviour
         m_button.onClick.RemoveAllListeners();
     }
 
-    public void Init(ActionSO actionSO)
+    public override void Init(ActionSO actionSO)
     {
-        m_icon.sprite = actionSO.Icon;
+        base.Init(actionSO);
+
         m_button.onClick.AddListener(() => actionSO.Execute());
     }
 }

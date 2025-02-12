@@ -15,4 +15,5 @@ MonoBehaviour:
   Icon: {fileID: 1954810469, guid: 75eac1f1b7e964fd083d8ce219a36316, type: 3}
   ActionName: Build Tower
   Guid: 04ef0da9-9a23-43bb-8f54-778d3018ae27
+  ActionCardPrefab: {fileID: -4207950847215864489, guid: c652c8a48c2d9fc4388df1ead553b0b7, type: 3}
   m_buildingSO: {fileID: 11400000, guid: dd943c67358cf3e44adb8b046658f53a, type: 2}

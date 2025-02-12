@@ -2,16 +2,14 @@ using UnityEngine;
 
 public class ActionBar : MonoBehaviour
 {
-    [SerializeField] private ActionButton m_actionButtonPrefab;
-
     private void SpawnActionButtons(ActionSO[] actions)
     {
         Clear();
 
         foreach (ActionSO action in actions)
         {
-            ActionButton actionButtonClone = Instantiate(m_actionButtonPrefab, this.transform);
-            actionButtonClone.Init(action);
+            ActionCard actionCardClone = Instantiate(action.ActionCardPrefab, this.transform);
+            actionCardClone.Init(action);
         }
     }
 

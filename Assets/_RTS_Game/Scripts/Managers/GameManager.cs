@@ -1,16 +1,41 @@
 using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class GameManager : SingletonManager<GameManager>
 {
-    #region Unit
+    [SerializeField] private Tilemap m_walkableTilemap;
+    [SerializeField] private Tilemap m_overlayTilemap;
+    [SerializeField] private Tilemap[] m_unreachableTilemap;
+    public Tilemap WalkableTilemap => m_walkableTilemap;
+    public Tilemap OverlayTilemap => m_overlayTilemap;
+    public Tilemap[] UnreachableTilemap => m_unreachableTilemap;
+
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
 
     public event Action<Vector2> OnMoveActiveUnit;
     public event Action<Unit> OnSelectUnit;
     public event Action OnDeselectUnit;
-    #endregion
+
+    private BuildingUnit m_activeBuildingUnit;
+
+    public void PlaceActiveBuildingUnit()
+    {
+        if (m_activeBuildingUnit == null) return;
+
+        if (!m_activeBuildingUnit.TryStartBuildProgress())
+        {
+            Destroy(m_activeBuildingUnit.gameObject);
+        }
+
+        m_activeBuildingUnit = null;
+    }
+
+    public void SelectNewBuildingUnit(BuildingUnit buildingUnit)
+    {
+        m_activeBuildingUnit = buildingUnit;
+    }
 
     public void MoveActiveUnitTo(Vector2 position)
     {
