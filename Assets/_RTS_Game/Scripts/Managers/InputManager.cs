@@ -35,7 +35,7 @@ public class InputManager : SingletonManager<InputManager>
         return false;
     }
 
-    private bool TryGetShortClickPosition(out Vector2 inputPosition, float maxDistance = 5.0f)
+    private bool TryGetShortClickPosition(out Vector2 inputPosition, float maxDistance = 20.0f)
     {
         inputPosition = InputPosition;
 

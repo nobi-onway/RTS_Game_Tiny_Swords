@@ -19,6 +19,8 @@ public class GameManager : SingletonManager<GameManager>
     public event Action OnDeselectUnit;
 
     private BuildingUnit m_activeBuildingUnit;
+    public event Action OnCancelSelectBuildingUnit;
+    public event Action<BuildingSO> OnSelectBuildingUnit;
 
     public void PlaceActiveBuildingUnit()
     {
@@ -29,12 +31,14 @@ public class GameManager : SingletonManager<GameManager>
             Destroy(m_activeBuildingUnit.gameObject);
         }
 
+        OnCancelSelectBuildingUnit?.Invoke();
         m_activeBuildingUnit = null;
     }
 
-    public void SelectNewBuildingUnit(BuildingUnit buildingUnit)
+    public void SelectNewBuildingUnit(BuildingUnit buildingUnit, BuildingSO buildingSO)
     {
         m_activeBuildingUnit = buildingUnit;
+        OnSelectBuildingUnit?.Invoke(buildingSO);
     }
 
     public void MoveActiveUnitTo(Vector2 position)

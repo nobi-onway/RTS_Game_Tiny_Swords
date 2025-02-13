@@ -5,6 +5,7 @@ public class UIManager : SingletonManager<UIManager>
     [Header("UI")]
     [SerializeField] private PointToClick m_pointToClickPrefab;
     [SerializeField] private ActionBar m_actionBar;
+    [SerializeField] private ConfirmationBar m_confirmationBar;
     private PointToClick m_pointToClick;
 
     private void Start()
@@ -12,6 +13,9 @@ public class UIManager : SingletonManager<UIManager>
         GameManager.Instance.OnMoveActiveUnit += DisplayClickEffect;
         GameManager.Instance.OnDeselectUnit += HideActionBar;
         GameManager.Instance.OnSelectUnit += ShowActionBar;
+
+        GameManager.Instance.OnSelectBuildingUnit += HandleSelectBuildingUI;
+        GameManager.Instance.OnCancelSelectBuildingUnit += HideConfirmationBar;
     }
 
     private void OnDisable()
@@ -19,6 +23,9 @@ public class UIManager : SingletonManager<UIManager>
         GameManager.Instance.OnMoveActiveUnit -= DisplayClickEffect;
         GameManager.Instance.OnDeselectUnit -= HideActionBar;
         GameManager.Instance.OnSelectUnit -= ShowActionBar;
+
+        GameManager.Instance.OnSelectBuildingUnit -= HandleSelectBuildingUI;
+        GameManager.Instance.OnCancelSelectBuildingUnit -= HideConfirmationBar;
     }
 
     private void DisplayClickEffect(Vector2 position)
@@ -36,6 +43,16 @@ public class UIManager : SingletonManager<UIManager>
     private void ShowActionBar(Unit unit)
     {
         m_actionBar.Show(unit.ActionSOArray);
+    }
+
+    private void HandleSelectBuildingUI(BuildingSO buildingSO)
+    {
+        m_confirmationBar.Show(buildingSO.GoldCost, buildingSO.WoodCost);
+    }
+
+    private void HideConfirmationBar()
+    {
+        m_confirmationBar.Hide();
     }
 
 }

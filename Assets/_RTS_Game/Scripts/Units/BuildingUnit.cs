@@ -22,12 +22,12 @@ public class BuildingUnit : MonoBehaviour
     {
         if (m_buildingProgress.HasValue) return;
 
+        HighlightTiles(GridUtils.SnapToGrid(this.transform.position));
+
         if (InputManager.Instance.TryGetHoldWorldPosition(out Vector2 worldPosition))
         {
             Vector3Int snapPosition = GridUtils.SnapToGrid(worldPosition);
-
             this.transform.position = snapPosition;
-            HighlightTiles(snapPosition);
         }
     }
 

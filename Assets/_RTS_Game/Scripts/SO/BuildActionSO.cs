@@ -22,6 +22,6 @@ public class BuildActionSO : ActionSO
             GameManager.Instance.UnreachableTilemap
         );
 
-        GameManager.Instance.SelectNewBuildingUnit(buildingUnit);
+        GameManager.Instance.SelectNewBuildingUnit(buildingUnit, m_buildingSO);
     }
 }
