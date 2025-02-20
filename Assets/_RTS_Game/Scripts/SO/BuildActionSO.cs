@@ -14,7 +14,7 @@ public class BuildActionSO : ActionSO
 
     public override void PrepareExecute()
     {
-        BuildingUnit buildingUnit = new GameObject(m_buildingSO.name).AddComponent<BuildingUnit>();
+        BuildingUnit buildingUnit = Instantiate(m_buildingSO.BuildingUnitPrefab);
         buildingUnit.SetUpBySO(
             m_buildingSO,
             GameManager.Instance.WalkableTilemap,

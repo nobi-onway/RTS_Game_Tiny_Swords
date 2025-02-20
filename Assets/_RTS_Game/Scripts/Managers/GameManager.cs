@@ -26,7 +26,7 @@ public class GameManager : SingletonManager<GameManager>
     {
         if (m_activeBuildingUnit == null) return;
 
-        if (!m_activeBuildingUnit.TryStartBuildProgress())
+        if (!m_activeBuildingUnit.TryStartBuildProgress(m_activeUnit as WorkerUnit))
         {
             Destroy(m_activeBuildingUnit.gameObject);
         }
@@ -41,12 +41,15 @@ public class GameManager : SingletonManager<GameManager>
         OnSelectBuildingUnit?.Invoke(buildingSO);
     }
 
-    public void MoveActiveUnitTo(Vector2 position)
+    public void ExecuteActiveUnit(Vector2 position)
     {
         if (!m_hasActiveUnit) return;
 
-        m_activeUnit.MoveTo(position);
-        OnMoveActiveUnit?.Invoke(position);
+        if (m_activeUnit is HumanoidUnit)
+        {
+            ((HumanoidUnit)m_activeUnit).MoveTo(position);
+            OnMoveActiveUnit?.Invoke(position);
+        }
     }
     public void SelectUnit(Unit unit)
     {
@@ -56,7 +59,10 @@ public class GameManager : SingletonManager<GameManager>
             return;
         }
 
-        SelectNewUnit(unit);
+        if (!m_hasActiveUnit || !m_activeUnit.TryInteractWithOtherUnit(unit))
+        {
+            SelectNewUnit(unit);
+        }
     }
 
     private void SelectNewUnit(Unit unit)
@@ -82,5 +88,16 @@ public class GameManager : SingletonManager<GameManager>
 
         if (m_activeUnit != null) OnSelectUnit?.Invoke(unit);
         if (m_activeUnit == null) OnDeselectUnit?.Invoke();
+    }
+
+    void OnGUI()
+    {
+        if (m_activeUnit)
+        {
+            if (!m_activeUnit.TryGetComponent(out WorkerUnit workerUnit)) return;
+
+            GUI.Label(new Rect(20, 120, 200, 20), "State: " + workerUnit.CurrentState, new GUIStyle { fontSize = 30 });
+            GUI.Label(new Rect(20, 160, 200, 20), "Task: " + workerUnit.CurrentTask, new GUIStyle { fontSize = 30 });
+        }
     }
 }

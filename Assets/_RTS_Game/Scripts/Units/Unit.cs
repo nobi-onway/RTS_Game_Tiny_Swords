@@ -3,25 +3,19 @@ using UnityEngine;
 public abstract class Unit : MonoBehaviour
 {
     [SerializeField] private ActionSO[] m_actionSOArray;
-
-    private Material m_highlightMaterial;
-    private Material m_originalMaterial;
+    [SerializeField] private float m_objectDetectionRadius;
 
     protected Animator animator;
-    protected AIPawn AIPawn;
     protected SpriteRenderer spriteRenderer;
 
     public ActionSO[] ActionSOArray => m_actionSOArray;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         SetUpComponent<Animator>(ref animator);
-        SetUpComponent<AIPawn>(ref AIPawn);
         SetUpComponent<SpriteRenderer>(ref spriteRenderer);
-
-        m_originalMaterial = spriteRenderer.material;
-        m_highlightMaterial = Resources.Load<Material>("Materials/Outline_Material");
     }
+
     protected void SetUpComponent<T>(ref T component) where T : Component
     {
         if (!TryGetComponent(out T componentTryToGet)) return;
@@ -29,12 +23,26 @@ public abstract class Unit : MonoBehaviour
         component = componentTryToGet;
     }
 
-    public void MoveTo(Vector3 position)
+    private Collider2D[] RunProximityObjectDetection()
     {
-        Vector2 direction = (position - this.transform.position).normalized;
-        spriteRenderer.flipX = direction.x < 0;
+        return Physics2D.OverlapCircleAll(transform.position, m_objectDetectionRadius);
+    }
 
-        AIPawn.SetDestination(position);
+    protected bool IsCloseObject<T>(out T obj) where T : MonoBehaviour
+    {
+        Collider2D[] hits = RunProximityObjectDetection();
+
+
+        foreach (Collider2D hit in hits)
+        {
+            if (!hit.TryGetComponent<T>(out T component)) continue;
+
+            obj = component;
+            return true;
+        }
+
+        obj = default(T);
+        return false;
     }
 
     public void Select()
@@ -47,13 +55,15 @@ public abstract class Unit : MonoBehaviour
         Unhighlight();
     }
 
+    public virtual bool TryInteractWithOtherUnit(Unit unit) => false;
+
     private void Highlight()
     {
-        spriteRenderer.material = m_highlightMaterial;
+        spriteRenderer.material = ResourceManager.Instance.HighlightMaterial;
     }
 
     private void Unhighlight()
     {
-        spriteRenderer.material = m_originalMaterial;
+        spriteRenderer.material = ResourceManager.Instance.OriginalMaterial;
     }
 }

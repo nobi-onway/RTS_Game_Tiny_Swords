@@ -7,6 +7,9 @@ public class BuildingSO : ScriptableObject
     [SerializeField] private int m_goldCost, m_woodCost;
     [SerializeField] private Vector2Int m_buildingSize;
     [SerializeField] private Vector3Int m_buildingOffset;
+    [SerializeField] private float m_buildingTime;
+    [SerializeField] private BuildingUnit m_buildingUnitPrefab;
+    [SerializeField] private ParticleSystem m_constructEffectPrefab;
 
     public Sprite PlacementSprite => m_placementSprite;
     public Sprite FoundationSprite => m_foundationSprite;
@@ -15,4 +18,7 @@ public class BuildingSO : ScriptableObject
     public int WoodCost => m_woodCost;
     public Vector2Int BuildingSize => m_buildingSize;
     public Vector3Int BuildingOffset => m_buildingOffset;
+    public float BuildingTime => m_buildingTime;
+    public BuildingUnit BuildingUnitPrefab => m_buildingUnitPrefab;
+    public ParticleSystem BuildingEffectPrefab => m_constructEffectPrefab;
 }

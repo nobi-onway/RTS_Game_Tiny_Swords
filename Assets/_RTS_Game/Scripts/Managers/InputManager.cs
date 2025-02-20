@@ -98,6 +98,6 @@ public class InputManager : SingletonManager<InputManager>
 
     private void HandleClickOnGround(Vector2 position)
     {
-        GameManager.Instance.MoveActiveUnitTo(position);
+        GameManager.Instance.ExecuteActiveUnit(position);
     }
 }
