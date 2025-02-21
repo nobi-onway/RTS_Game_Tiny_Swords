@@ -17,13 +17,11 @@ public class WorkerUnit : HumanoidUnit
     private void OnEnable()
     {
         m_stateSystem.OnValueChange += OnStateChange;
-        m_taskSystem.OnValueChange += OnTaskChange;
     }
 
     private void OnDisable()
     {
         m_stateSystem.OnValueChange -= OnStateChange;
-        m_taskSystem.OnValueChange -= OnTaskChange;
     }
 
     protected override void UpdateBehavior()
@@ -53,12 +51,6 @@ public class WorkerUnit : HumanoidUnit
     {
         animator.SetBool("IsBuilding", newState == EWorkerState.Building);
     }
-
-    private void OnTaskChange(EWorkerTask newTask)
-    {
-        
-    }
-
     private void DetectBuilding()
     {
         if (!IsCloseObject(out BuildingUnit buildingUnit)) return;
@@ -81,6 +73,7 @@ public class WorkerUnit : HumanoidUnit
     {
         m_targetBuilding = null;
         m_taskSystem.SetValue(EWorkerTask.None);
+        m_stateSystem.SetValue(EWorkerState.Building, EWorkerState.Idle);
     }
 
     public override bool TryInteractWithOtherUnit(Unit unit)

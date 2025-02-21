@@ -55,16 +55,14 @@ public class BuildingUnit : Unit
         return false;
     }
 
-    public void SetUpBySO(BuildingSO buildingSO, Tilemap walkableTilemap, Tilemap overlayTilemap, Tilemap[] unreachalbeTilemap)
+    public void SetUpBySO(BuildingSO buildingSO, TilemapManager tilemapManager)
     {
         m_buildingSO = buildingSO;
         m_placementProcess = new PlacementProcess(
                                                     this.transform,
                                                     buildingSO.PlacementSprite,
                                                     ref spriteRenderer,
-                                                    walkableTilemap,
-                                                    overlayTilemap,
-                                                    unreachalbeTilemap
+                                                    tilemapManager
                                                 );
     }
 }

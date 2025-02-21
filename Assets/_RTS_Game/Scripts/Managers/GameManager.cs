@@ -1,16 +1,8 @@
 using System;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class GameManager : SingletonManager<GameManager>
 {
-    [SerializeField] private Tilemap m_walkableTilemap;
-    [SerializeField] private Tilemap m_overlayTilemap;
-    [SerializeField] private Tilemap[] m_unreachableTilemap;
-    public Tilemap WalkableTilemap => m_walkableTilemap;
-    public Tilemap OverlayTilemap => m_overlayTilemap;
-    public Tilemap[] UnreachableTilemap => m_unreachableTilemap;
-
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
 

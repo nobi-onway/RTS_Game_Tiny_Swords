@@ -17,9 +17,7 @@ public class BuildActionSO : ActionSO
         BuildingUnit buildingUnit = Instantiate(m_buildingSO.BuildingUnitPrefab);
         buildingUnit.SetUpBySO(
             m_buildingSO,
-            GameManager.Instance.WalkableTilemap,
-            GameManager.Instance.OverlayTilemap,
-            GameManager.Instance.UnreachableTilemap
+            TilemapManager.Instance
         );
 
         GameManager.Instance.SelectNewBuildingUnit(buildingUnit, m_buildingSO);
