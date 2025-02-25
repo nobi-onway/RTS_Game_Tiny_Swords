@@ -6,7 +6,12 @@ public class PathNode
     public int y;
     public float centerX;
     public float centerY;
-    public bool IsWalkable;
+    public bool isWalkable;
+
+    public int gCost;
+    public int hCost;
+    public int fCost => gCost + hCost;
+    public PathNode parent;
 
     public PathNode(Vector3Int position, Vector3 cellSize, bool isWalkable)
     {
@@ -19,11 +24,11 @@ public class PathNode
         centerX = nodeCenterPosition.x;
         centerY = nodeCenterPosition.y;
 
-        this.IsWalkable = isWalkable;
+        this.isWalkable = isWalkable;
     }
 
     public override string ToString()
     {
-        return $"x: {centerX}, y: {centerY}";
+        return $"({x}, {y})";
     }
 }

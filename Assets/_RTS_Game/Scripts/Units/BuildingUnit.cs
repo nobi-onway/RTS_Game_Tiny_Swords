@@ -1,3 +1,5 @@
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 
 public class BuildingUnit : Unit
@@ -32,7 +34,7 @@ public class BuildingUnit : Unit
 
     public void UpdateBuildingProgress(float progress)
     {
-        m_buildingProcess.Update(progress);
+        m_buildingProcess.Update(progress, UpdateBuildingArea);
     }
 
     public bool TryStartBuildProgress(WorkerUnit workerUnit)
@@ -64,5 +66,18 @@ public class BuildingUnit : Unit
                                                     ref spriteRenderer,
                                                     tilemapManager
                                                 );
+    }
+
+    private void UpdateBuildingArea()
+    {
+        int buildingWidthInTiles = 6;
+        int buildingHeightInTiles = 6;
+
+        float halfWidth = buildingWidthInTiles / 2;
+        float halfHeight = buildingHeightInTiles / 2;
+
+        Vector3Int startPosition = GridUtils.SnapToGrid(this.transform.position - new Vector3(halfWidth, halfHeight));
+
+        TilemapManager.Instance.PathFinding.UpdateNodesInArea(startPosition, buildingWidthInTiles, buildingHeightInTiles);
     }
 }

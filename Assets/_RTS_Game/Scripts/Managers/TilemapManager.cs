@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,12 +10,8 @@ public class TilemapManager : SingletonManager<TilemapManager>
     private Color m_blockColor = new Color(1f, 0.2f, 0, 0.8f);
     private Sprite m_placeholderTileSprite;
     private Vector3Int[] m_highlightPositions;
-
-    public Tilemap PathFindingTileMap => m_walkableTilemap;
-
-    [SerializeField] private Transform warriorPos, builderPos;
-    PathFinding m_pathFiding;
-
+    private PathFinding m_pathFinding;
+    public PathFinding PathFinding => m_pathFinding;
 
     protected override void Awake()
     {
@@ -26,14 +20,9 @@ public class TilemapManager : SingletonManager<TilemapManager>
         m_placeholderTileSprite = Resources.Load<Sprite>("Images/PlaceholderTileSprite");
     }
 
-    private void Update()
-    {
-        m_pathFiding.FindPath(warriorPos.position, builderPos.position);
-    }
-
     private void Start()
     {
-        m_pathFiding = new PathFinding(this);
+        m_pathFinding = new PathFinding(m_walkableTilemap, CanWalkAtTile);
     }
 
     public bool IsInWalkable(Vector3Int tilePosition)
@@ -51,7 +40,7 @@ public class TilemapManager : SingletonManager<TilemapManager>
         return false;
     }
 
-    public bool IsBlockByHumanoidUnit(Vector3Int tilePosition)
+    public bool IsBlockByUnitType<T>(Vector3Int tilePosition) where T : Unit
     {
         Vector3 tileSize = m_walkableTilemap.cellSize;
         Collider2D[] colliders = Physics2D.OverlapBoxAll(tilePosition + tileSize * 0.5f, tileSize * 0.5f, 0);
@@ -60,7 +49,7 @@ public class TilemapManager : SingletonManager<TilemapManager>
         {
             if (collider.TryGetComponent(out Unit unit))
             {
-                if (unit is HumanoidUnit) return true;
+                if (unit is T) return true;
             }
         }
 
@@ -104,6 +93,10 @@ public class TilemapManager : SingletonManager<TilemapManager>
         return m_highlightPositions;
     }
 
-    public bool CanWalkAtTile(Vector3Int tilePosition) => IsInWalkable(tilePosition) && !IsInUnreachableTileMap(tilePosition);
-    public bool CanPlaceTile(Vector3Int tilePosition) => IsInWalkable(tilePosition) && !IsBlockByHumanoidUnit(tilePosition) && !IsInUnreachableTileMap(tilePosition);
+    private bool CanWalkAtTile(Vector3Int tilePosition) => IsInWalkable(tilePosition)
+                                                          && !IsInUnreachableTileMap(tilePosition)
+                                                          && !IsBlockByUnitType<BuildingUnit>(tilePosition);
+    public bool CanPlaceTile(Vector3Int tilePosition) => IsInWalkable(tilePosition)
+                                                        && !IsBlockByUnitType<HumanoidUnit>(tilePosition)
+                                                        && !IsInUnreachableTileMap(tilePosition);
 }

@@ -6,6 +6,8 @@ public abstract class HumanoidUnit : Unit
     private Vector2 m_lastPos;
     protected AIPawn AIPawn;
     private float m_currentSpeed => m_velocity.magnitude;
+    private float m_smoothSpeed;
+    private float m_smoothFactor = 50;
 
     private bool m_isMoving;
 
@@ -28,9 +30,6 @@ public abstract class HumanoidUnit : Unit
 
     public void MoveTo(Vector3 position)
     {
-        Vector2 direction = (position - this.transform.position).normalized;
-        spriteRenderer.flipX = direction.x < 0;
-
         AIPawn.SetDestination(position);
         OnSetDestination();
     }
@@ -43,11 +42,13 @@ public abstract class HumanoidUnit : Unit
                 ) / Time.deltaTime;
 
         m_lastPos = transform.position;
-        m_isMoving = m_currentSpeed > 0;
+        m_smoothSpeed = Mathf.Lerp(m_smoothSpeed, m_currentSpeed, m_smoothFactor * Time.deltaTime);
+
+        m_isMoving = m_smoothSpeed > 0;
 
         if (!m_isMoving) OnStopMove();
 
-        animator.SetFloat("Speed", Mathf.Clamp01(m_currentSpeed));
+        animator.SetFloat("Speed", Mathf.Clamp01(m_smoothSpeed));
     }
 
     protected abstract void UpdateBehavior();

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BuildingProcess
 {
@@ -16,16 +18,17 @@ public class BuildingProcess
     {
         m_buildingTime = buildingTime;
         m_completionSprite = completionSprite;
-        m_constructEffect = Object.Instantiate(constructEffectPrefab, parent.transform);
+        m_constructEffect = UnityEngine.Object.Instantiate(constructEffectPrefab, parent.transform);
 
         InitVisual(parent, foundationSprite, ref spriteRenderer);
     }
 
-    public void Update(float progress)
+    public void Update(float progress, Action OnBuildingFinished)
     {
         if (IsConstructCompleted)
         {
             OnBuildingCompleted();
+            OnBuildingFinished?.Invoke();
             return;
         }
 
