@@ -4,55 +4,43 @@ public class UIManager : SingletonManager<UIManager>
 {
     [Header("UI")]
     [SerializeField] private PointToClick m_pointToClickPrefab;
+    [SerializeField] private TextPopup m_textPopupPrefab;
     [SerializeField] private ActionBar m_actionBar;
     [SerializeField] private ConfirmationBar m_confirmationBar;
     private PointToClick m_pointToClick;
 
-    private void Start()
-    {
-        GameManager.Instance.OnMoveActiveUnit += DisplayClickEffect;
-        GameManager.Instance.OnDeselectUnit += HideActionBar;
-        GameManager.Instance.OnSelectUnit += ShowActionBar;
-
-        GameManager.Instance.OnSelectBuildingUnit += HandleSelectBuildingUI;
-        GameManager.Instance.OnCancelSelectBuildingUnit += HideConfirmationBar;
-    }
-
-    private void OnDisable()
-    {
-        GameManager.Instance.OnMoveActiveUnit -= DisplayClickEffect;
-        GameManager.Instance.OnDeselectUnit -= HideActionBar;
-        GameManager.Instance.OnSelectUnit -= ShowActionBar;
-
-        GameManager.Instance.OnSelectBuildingUnit -= HandleSelectBuildingUI;
-        GameManager.Instance.OnCancelSelectBuildingUnit -= HideConfirmationBar;
-    }
-
-    private void DisplayClickEffect(Vector2 position)
+    public void DisplayClickEffect(Vector2 position)
     {
         if (m_pointToClick == null) m_pointToClick = Instantiate(m_pointToClickPrefab);
 
         m_pointToClick.DisplayAt(position);
     }
 
-    private void HideActionBar()
+    public void HideActionBar()
     {
         m_actionBar.Hide();
     }
 
-    private void ShowActionBar(Unit unit)
+    public void ShowActionBar(ActionSO[] actions)
     {
-        m_actionBar.Show(unit.ActionSOArray);
+        m_actionBar.Show(actions);
     }
 
-    private void HandleSelectBuildingUI(BuildingSO buildingSO)
+    public void ShowBuildingConfirmationBar(BuildingSO buildingSO)
     {
         m_confirmationBar.Show(buildingSO.GoldCost, buildingSO.WoodCost);
     }
 
-    private void HideConfirmationBar()
+    public void HideBuildingConfirmationBar()
     {
         m_confirmationBar.Hide();
+    }
+
+    public void SpawnTextPopup(Vector3 position, string text, Color color)
+    {
+        TextPopup textPopupClone = Instantiate(m_textPopupPrefab, position, Quaternion.identity);
+
+        textPopupClone.SetText(text, color);
     }
 
 }

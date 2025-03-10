@@ -10,6 +10,7 @@ public class BuildActionSO : ActionSO
     public override void Execute()
     {
         GameManager.Instance.PlaceActiveBuildingUnit();
+        UIManager.Instance.HideBuildingConfirmationBar();
     }
 
     public override void PrepareExecute()
@@ -20,6 +21,7 @@ public class BuildActionSO : ActionSO
             TilemapManager.Instance
         );
 
-        GameManager.Instance.SelectNewBuildingUnit(buildingUnit, m_buildingSO);
+        GameManager.Instance.SelectNewBuildingUnit(buildingUnit);
+        UIManager.Instance.ShowBuildingConfirmationBar(m_buildingSO);
     }
 }

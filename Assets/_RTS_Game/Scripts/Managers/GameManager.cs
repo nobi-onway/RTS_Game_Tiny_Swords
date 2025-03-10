@@ -1,18 +1,25 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : SingletonManager<GameManager>
 {
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
-
-    public event Action<Vector2> OnMoveActiveUnit;
-    public event Action<Unit> OnSelectUnit;
-    public event Action OnDeselectUnit;
-
     private BuildingUnit m_activeBuildingUnit;
-    public event Action OnCancelSelectBuildingUnit;
-    public event Action<BuildingSO> OnSelectBuildingUnit;
+    private List<Unit> m_playerUnits = new();
+    private List<Unit> m_enemyUnits = new();
+
+    private Dictionary<EUnitClass, List<Unit>> UnitListLookUp;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        UnitListLookUp = new Dictionary<EUnitClass, List<Unit>>() {
+            { EUnitClass.PLAYER, m_playerUnits },
+            { EUnitClass.ENEMY, m_enemyUnits },
+        };
+    }
 
     public void PlaceActiveBuildingUnit()
     {
@@ -23,25 +30,36 @@ public class GameManager : SingletonManager<GameManager>
             Destroy(m_activeBuildingUnit.gameObject);
         }
 
-        OnCancelSelectBuildingUnit?.Invoke();
         m_activeBuildingUnit = null;
     }
-
-    public void SelectNewBuildingUnit(BuildingUnit buildingUnit, BuildingSO buildingSO)
+    public void SelectNewBuildingUnit(BuildingUnit buildingUnit)
     {
         m_activeBuildingUnit = buildingUnit;
-        OnSelectBuildingUnit?.Invoke(buildingSO);
     }
-
     public void ExecuteActiveUnit(Vector2 position)
     {
         if (!m_hasActiveUnit) return;
 
-        if (m_activeUnit is HumanoidUnit)
+        m_activeUnit.DoActionAt(position);
+    }
+    public Unit FindClosestUnit(Vector3 originalPosition, float maxDistance, EUnitClass unitClass)
+    {
+        List<Unit> units = UnitListLookUp[unitClass];
+
+        Unit closestUnit = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (Unit unit in units)
         {
-            ((HumanoidUnit)m_activeUnit).MoveTo(position);
-            OnMoveActiveUnit?.Invoke(position);
+            float distance = Vector3.Distance(originalPosition, unit.transform.position);
+            if (distance <= maxDistance && distance < closestDistance)
+            {
+                closestUnit = unit;
+                closestDistance = distance;
+            }
         }
+
+        return closestUnit;
     }
     public void SelectUnit(Unit unit)
     {
@@ -56,40 +74,44 @@ public class GameManager : SingletonManager<GameManager>
             SelectNewUnit(unit);
         }
     }
-
+    public void RegisterUnit(Unit unit)
+    {
+        UnitListLookUp[unit.Class].Add(unit);
+    }
+    public void UnregisterUnit(Unit unit)
+    {
+        UnitListLookUp[unit.Class].Remove(unit);
+    }
     private void SelectNewUnit(Unit unit)
     {
-        if (m_hasActiveUnit)
-        {
-            m_activeUnit.Deselect();
-        }
+        if (!unit.TryGetComponent(out SelectableUnit selectableUnit)) return;
+
+        CancelActiveUnit();
 
         SetActiveUnit(unit);
-        m_activeUnit.Select();
+        selectableUnit.Select();
     }
 
     private void CancelActiveUnit()
     {
-        m_activeUnit.Deselect();
+        if (!m_hasActiveUnit) return;
+        if (!m_activeUnit.TryGetComponent(out SelectableUnit selectableUnit)) return;
+
+        selectableUnit.Deselect();
         SetActiveUnit(null);
     }
 
     private void SetActiveUnit(Unit unit)
     {
         m_activeUnit = unit;
-
-        if (m_activeUnit != null) OnSelectUnit?.Invoke(unit);
-        if (m_activeUnit == null) OnDeselectUnit?.Invoke();
     }
 
     void OnGUI()
     {
         if (m_activeUnit)
         {
-            if (!m_activeUnit.TryGetComponent(out WorkerUnit workerUnit)) return;
-
-            GUI.Label(new Rect(20, 120, 200, 20), "State: " + workerUnit.CurrentState, new GUIStyle { fontSize = 30 });
-            GUI.Label(new Rect(20, 160, 200, 20), "Task: " + workerUnit.CurrentTask, new GUIStyle { fontSize = 30 });
+            GUI.Label(new Rect(20, 120, 200, 20), "State: " + m_activeUnit.CurrentState, new GUIStyle { fontSize = 30 });
+            // GUI.Label(new Rect(20, 160, 200, 20), "Task: " + m_activeUnit.CurrentTask, new GUIStyle { fontSize = 30 });
         }
     }
 }

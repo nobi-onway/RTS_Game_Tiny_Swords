@@ -1,26 +1,25 @@
 using UnityEngine;
 
 public enum EWorkerTask { None, Build }
-public enum EWorkerState { Idle, Moving, Building }
 
 public class WorkerUnit : HumanoidUnit
 {
     [SerializeField]
-    private BuildingUnit m_targetBuilding;
+    private BuildingUnit m_targetBuilding => target?.GetComponent<BuildingUnit>();
 
-    private EnumSystem<EWorkerState> m_stateSystem = new EnumSystem<EWorkerState>();
-    private EnumSystem<EWorkerTask> m_taskSystem = new EnumSystem<EWorkerTask>();
+    private EnumSystem<EWorkerTask> m_taskSystem = new();
 
-    public EWorkerState CurrentState => m_stateSystem.Value;
     public EWorkerTask CurrentTask => m_taskSystem.Value;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         m_stateSystem.OnValueChange += OnStateChange;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         m_stateSystem.OnValueChange -= OnStateChange;
     }
 
@@ -30,50 +29,42 @@ public class WorkerUnit : HumanoidUnit
 
         DetectBuilding();
 
-        if (m_stateSystem.IsCurrentValue(EWorkerState.Building))
+        if (m_stateSystem.IsCurrentValue(EUnitState.BUILDING))
         {
             m_targetBuilding?.UpdateBuildingProgress(Time.fixedDeltaTime);
         }
     }
-
-    protected override void OnSetDestination()
+    protected override void ResetAction()
     {
-        m_stateSystem.SetValue(EWorkerState.Moving);
         m_targetBuilding?.UnassignWorkerUnit(this);
     }
-
-    protected override void OnStopMove()
+    private void OnStateChange(EUnitState newState)
     {
-        m_stateSystem.SetValue(EWorkerState.Moving, EWorkerState.Idle);
-    }
-
-    private void OnStateChange(EWorkerState newState)
-    {
-        animator.SetBool("IsBuilding", newState == EWorkerState.Building);
+        animator.SetBool("IsBuilding", newState == EUnitState.BUILDING);
     }
     private void DetectBuilding()
     {
         if (!IsCloseObject(out BuildingUnit buildingUnit)) return;
         if (buildingUnit != m_targetBuilding) return;
 
-        m_stateSystem.SetValue(EWorkerState.Idle, EWorkerState.Building);
+        m_stateSystem.SetValue(EUnitState.IDLE, EUnitState.BUILDING);
     }
 
     public void AssignToBuildProcess(BuildingUnit targetBuilding)
     {
         if (targetBuilding == null) return;
 
+        SetTarget(targetBuilding);
         MoveTo(targetBuilding.transform.position + Vector3.up * 1.5f);
 
-        m_targetBuilding = targetBuilding;
         m_taskSystem.SetValue(EWorkerTask.Build);
     }
 
     public void UnassignFromBuildProcess()
     {
-        m_targetBuilding = null;
+        SetTarget(null);
         m_taskSystem.SetValue(EWorkerTask.None);
-        m_stateSystem.SetValue(EWorkerState.Building, EWorkerState.Idle);
+        m_stateSystem.SetValue(EUnitState.BUILDING, EUnitState.IDLE);
     }
 
     public override bool TryInteractWithOtherUnit(Unit unit)

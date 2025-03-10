@@ -1,57 +1,51 @@
 using UnityEngine;
 
-public abstract class HumanoidUnit : Unit
+public class HumanoidUnit : Unit
 {
-    private Vector2 m_velocity;
-    private Vector2 m_lastPos;
-    protected AIPawn AIPawn;
-    private float m_currentSpeed => m_velocity.magnitude;
-    private float m_smoothSpeed;
-    private float m_smoothFactor = 50;
-
-    private bool m_isMoving;
+    protected Mover m_mover;
+    protected UnitRadar m_unitRadar;
 
     protected override void Awake()
     {
         base.Awake();
-        SetUpComponent<AIPawn>(ref AIPawn);
+
+        GeneralUtils.SetUpComponent<Mover>(this.transform, ref m_mover);
+        GeneralUtils.SetUpComponent<UnitRadar>(this.transform, ref m_unitRadar);
     }
 
-    private void Start()
+    protected virtual void OnEnable()
     {
-        m_lastPos = transform.position;
+        m_mover.OnMove += ToMoveStateIf;
+    }
+
+    protected virtual void OnDisable()
+    {
+        m_mover.OnMove -= ToMoveStateIf;
     }
 
     private void FixedUpdate()
     {
-        UpdateVelocity();
         UpdateBehavior();
     }
 
-    public void MoveTo(Vector3 position)
+    protected void MoveTo(Vector3 position)
     {
-        AIPawn.SetDestination(position);
-        OnSetDestination();
+        m_mover.MoveTo(position);
+        m_stateSystem.SetValue(EUnitState.MOVING);
     }
 
-    private void UpdateVelocity()
+    public override void DoActionAt(Vector2 position)
     {
-        m_velocity = new Vector2(
-                    transform.position.x - m_lastPos.x,
-                    transform.position.y - m_lastPos.y
-                ) / Time.deltaTime;
+        ResetAction();
 
-        m_lastPos = transform.position;
-        m_smoothSpeed = Mathf.Lerp(m_smoothSpeed, m_currentSpeed, m_smoothFactor * Time.deltaTime);
-
-        m_isMoving = m_smoothSpeed > 0;
-
-        if (!m_isMoving) OnStopMove();
-
-        animator.SetFloat("Speed", Mathf.Clamp01(m_smoothSpeed));
+        MoveTo(position);
+        UIManager.Instance.DisplayClickEffect(position);
     }
-
-    protected abstract void UpdateBehavior();
-    protected virtual void OnSetDestination() { }
-    protected virtual void OnStopMove() { }
+    protected virtual void ResetAction() { }
+    protected virtual void UpdateBehavior() { }
+    private void ToMoveStateIf(bool isMoving)
+    {
+        if (!isMoving) m_stateSystem.SetValue(EUnitState.MOVING, EUnitState.IDLE);
+        if (isMoving) m_stateSystem.SetValue(EUnitState.MOVING);
+    }
 }

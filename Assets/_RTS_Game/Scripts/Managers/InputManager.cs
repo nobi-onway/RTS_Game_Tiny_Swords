@@ -1,13 +1,19 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class InputManager : SingletonManager<InputManager>
 {
+    private const float PAN_SPEED = 50.0f;
+    private const float MOBILE_PAN_SPEED = 10.0f;
+
     private Vector2 m_initialTouchPosition;
     private bool m_isLeftClickOrTapDown => Input.GetMouseButtonDown(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began);
     private bool m_isLeftClickOrTapUp => Input.GetMouseButtonUp(0) || (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended);
-
     public Vector2 InputPosition => Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition;
+
+    public bool IsLockPan { get; set; }
+    public Action<Vector2, float> OnPanPosition;
 
     private void Update()
     {
@@ -15,6 +21,32 @@ public class InputManager : SingletonManager<InputManager>
         {
             DetectClick(inputPosition);
         }
+
+        TryGetPanPosition();
+    }
+
+    private bool TryGetPanPosition()
+    {
+        if (IsLockPan) return false;
+
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Moved)
+        {
+            Vector2 touchDeltaPosition = Input.GetTouch(0).deltaPosition;
+            Vector2 normalizedDelta = touchDeltaPosition / new Vector2(Screen.width, Screen.height);
+
+            OnPanPosition?.Invoke(normalizedDelta, MOBILE_PAN_SPEED);
+            return true;
+        }
+
+        if (Input.touchCount == 0 && Input.GetMouseButton(0))
+        {
+            Vector2 mouseDeltaPosition = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+
+            OnPanPosition?.Invoke(mouseDeltaPosition, PAN_SPEED);
+            return true;
+        }
+
+        return false;
     }
 
     public bool TryGetHoldWorldPosition(out Vector2 worldPosition)

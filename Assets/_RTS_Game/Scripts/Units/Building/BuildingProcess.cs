@@ -12,7 +12,7 @@ public class BuildingProcess
     private List<WorkerUnit> m_workerUnits = new();
     private ParticleSystem m_constructEffect;
     public bool IsConstructCompleted => m_buildingProgress >= m_buildingTime;
-    private bool m_IsUnderConstruction => m_workerUnits.Exists(worker => worker.CurrentState == EWorkerState.Building);
+    private bool m_IsUnderConstruction => m_workerUnits.Exists(worker => worker.CurrentState == EUnitState.BUILDING);
 
     public BuildingProcess(Transform parent, Sprite foundationSprite, Sprite completionSprite, float buildingTime, ParticleSystem constructEffectPrefab, ref SpriteRenderer spriteRenderer)
     {

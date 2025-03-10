@@ -1,22 +1,21 @@
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class AIPawn : MonoBehaviour
 {
     [SerializeField]
     private float m_speed;
+    [SerializeField]
     private List<Vector3> m_currentPath = new();
     private int m_currentNodeIndex;
     private SpriteRenderer m_spriteRenderer;
 
-    private void Start()
+    private void Awake()
     {
-        m_spriteRenderer = GetComponent<SpriteRenderer>();
+        GeneralUtils.SetUpComponent<SpriteRenderer>(this.transform, ref m_spriteRenderer);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         UpdatePosition();
     }
@@ -45,20 +44,27 @@ public class AIPawn : MonoBehaviour
         }
     }
 
-    public void SetDestination(Vector3 destination)
+    public void SetDestination(Vector3? destination)
     {
+        if (!destination.HasValue)
+        {
+            m_currentPath = null;
+            m_currentNodeIndex = 0;
+            return;
+        }
+
         PathFinding pathFinding = TilemapManager.Instance.PathFinding;
 
         if (m_currentPath != null && m_currentPath.Count > 0)
         {
-            PathNode newEndNode = pathFinding.FindNode(destination);
+            PathNode newEndNode = pathFinding.FindNode(destination.Value);
             if (newEndNode == null) return;
 
             Vector3 endDestination = new Vector3(newEndNode.centerX, newEndNode.centerY);
             if (Vector3.Distance(endDestination, m_currentPath[^1]) < 0.1f) return;
         }
 
-        m_currentPath = pathFinding.FindPath(this.transform.position, destination);
+        m_currentPath = pathFinding.FindPath(this.transform.position, destination.Value);
         m_currentNodeIndex = 0;
     }
 

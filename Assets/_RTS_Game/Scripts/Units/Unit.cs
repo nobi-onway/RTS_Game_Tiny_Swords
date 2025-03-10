@@ -2,25 +2,37 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
-    [SerializeField] private ActionSO[] m_actionSOArray;
     [SerializeField] private float m_objectDetectionRadius;
-
     protected Animator animator;
     protected SpriteRenderer spriteRenderer;
+    protected CapsuleCollider2D capsuleCollider2D;
+    public virtual EUnitClass Class => EUnitClass.PLAYER;
 
-    public ActionSO[] ActionSOArray => m_actionSOArray;
+    [SerializeField]
+    protected Unit target;
+    protected bool hasTarget => target != null;
+
+    protected EnumSystem<EUnitState> m_stateSystem = new();
+    public EUnitState CurrentState => m_stateSystem.Value;
 
     protected virtual void Awake()
     {
-        SetUpComponent<Animator>(ref animator);
-        SetUpComponent<SpriteRenderer>(ref spriteRenderer);
+        GeneralUtils.SetUpComponent<Animator>(transform, ref animator);
+        GeneralUtils.SetUpComponent<SpriteRenderer>(transform, ref spriteRenderer);
+        GeneralUtils.SetUpComponent<CapsuleCollider2D>(transform, ref capsuleCollider2D);
+    }
+    private void Start()
+    {
+        GameManager.Instance.RegisterUnit(this);
+    }
+    private void OnDestroy()
+    {
+        GameManager.Instance.UnregisterUnit(this);
     }
 
-    protected void SetUpComponent<T>(ref T component) where T : Component
+    protected void SetTarget(Unit unit)
     {
-        if (!TryGetComponent(out T componentTryToGet)) return;
-
-        component = componentTryToGet;
+        target = unit;
     }
 
     private Collider2D[] RunProximityObjectDetection()
@@ -31,7 +43,6 @@ public abstract class Unit : MonoBehaviour
     protected bool IsCloseObject<T>(out T obj) where T : MonoBehaviour
     {
         Collider2D[] hits = RunProximityObjectDetection();
-
 
         foreach (Collider2D hit in hits)
         {
@@ -45,25 +56,13 @@ public abstract class Unit : MonoBehaviour
         return false;
     }
 
-    public void Select()
+    public Vector3 GetTopPosition()
     {
-        Highlight();
-    }
+        if (capsuleCollider2D == null) return this.transform.position;
 
-    public void Deselect()
-    {
-        Unhighlight();
+        return this.transform.position + Vector3.up * capsuleCollider2D.size.y / 2;
     }
 
     public virtual bool TryInteractWithOtherUnit(Unit unit) => false;
-
-    private void Highlight()
-    {
-        spriteRenderer.material = ResourceManager.Instance.HighlightMaterial;
-    }
-
-    private void Unhighlight()
-    {
-        spriteRenderer.material = ResourceManager.Instance.OriginalMaterial;
-    }
+    public virtual void DoActionAt(Vector2 position) { }
 }
