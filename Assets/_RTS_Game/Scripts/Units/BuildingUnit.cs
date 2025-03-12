@@ -96,4 +96,11 @@ public class BuildingUnit : Unit
 
         UpdateCollider(new Vector2(m_collider2D.size.x, m_collider2D.size.y * 2));
     }
+
+    public override bool TryInteractWithOtherUnit(Unit unit)
+    {
+        if (!base.TryInteractWithOtherUnit(unit)) return false;
+
+        return false;
+    }
 }

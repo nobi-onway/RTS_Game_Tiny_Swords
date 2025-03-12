@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "SO/ActionSO", fileName = "ActionSO")]
+[CreateAssetMenu(menuName = "SO/ActionSO/BuildAction", fileName = "ActionSO")]
 public class BuildActionSO : ActionSO
 {
     [SerializeField] private BuildingSO m_buildingSO;
@@ -9,6 +9,8 @@ public class BuildActionSO : ActionSO
 
     public override void Execute()
     {
+        base.Execute();
+
         GameManager.Instance.PlaceActiveBuildingUnit();
         UIManager.Instance.HideBuildingConfirmationBar();
     }

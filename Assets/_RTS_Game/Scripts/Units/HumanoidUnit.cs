@@ -13,14 +13,20 @@ public class HumanoidUnit : Unit
         GeneralUtils.SetUpComponent<UnitRadar>(this.transform, ref m_unitRadar);
     }
 
-    protected virtual void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
+
         m_mover.OnMove += ToMoveStateIf;
+        m_unitRadar.OnScanned += HandleOnScanned;
     }
 
-    protected virtual void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         m_mover.OnMove -= ToMoveStateIf;
+        m_unitRadar.OnScanned -= HandleOnScanned;
     }
 
     private void FixedUpdate()
@@ -34,8 +40,22 @@ public class HumanoidUnit : Unit
         m_stateSystem.SetValue(EUnitState.MOVING);
     }
 
+    protected override void HandleOnDead()
+    {
+        base.HandleOnDead();
+
+        m_mover.StopMove();
+    }
+
+    protected virtual void HandleOnScanned(Unit unit)
+    {
+        SetTarget(unit);
+    }
+
     public override void DoActionAt(Vector2 position)
     {
+        if (!CanPerformAction()) return;
+
         ResetAction();
 
         MoveTo(position);

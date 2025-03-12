@@ -14,6 +14,12 @@ public class ActionButton : ActionCard
     {
         base.Init(actionSO);
 
-        m_button.onClick.AddListener(() => actionSO.Execute());
+        m_button.onClick.AddListener(() => OnButtonPressed(actionSO));
+    }
+
+    private void OnButtonPressed(ActionSO actionSO)
+    {
+        actionSO.Execute();
+        OnFocus?.Invoke(actionSO);
     }
 }

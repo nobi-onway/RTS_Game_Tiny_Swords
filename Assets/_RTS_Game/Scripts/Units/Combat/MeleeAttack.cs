@@ -1,13 +1,10 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MeleeAttack : MonoBehaviour, IActionNode
 {
-    private const string HORIZONTAL_ATK = "Horizontal_Attack";
-    private const string UP_ATK = "Up_Attack";
-    private const string DOWN_ATK = "Down_Attack";
-
     [SerializeField] private int m_damage;
     [SerializeField] private float m_attackRange;
     [SerializeField] private float m_attackCoolDownTime;
@@ -25,31 +22,37 @@ public class MeleeAttack : MonoBehaviour, IActionNode
         if (m_currentCoolDownTime < m_attackCoolDownTime) m_currentCoolDownTime += Time.deltaTime;
     }
 
-    private bool TryToAttack(Unit unit)
+    public bool TryToAttack(Unit unit)
     {
-        if (m_currentCoolDownTime < m_attackCoolDownTime) return false;
-        if (!unit) return false;
+        bool isInCoolDownTime = m_currentCoolDownTime < m_attackCoolDownTime;
+        if (isInCoolDownTime) return false;
+
+        bool isTargetDead = unit.CurrentState == EUnitState.DEAD;
+        if (isTargetDead) return false;
+
+        bool hasHealth = unit.TryGetComponent(out HealthController healthController);
+        if (!hasHealth) return false;
 
         PerformAttackAnimation(unit.transform.position);
 
-        StartCoroutine(IE_DelayDamage(m_attackDamageDelay, m_damage, unit));
+        StartCoroutine(IE_DelayDamage(m_attackDamageDelay, m_damage, healthController));
 
         m_currentCoolDownTime = 0;
         return true;
     }
 
-    private void TakeDamage(int damage, Unit target)
-    {
-        Debug.Log($"{target} was taken {damage} damage from {this.gameObject.name}");
+    public bool IsInAttackRange(Unit unit) => Vector2.Distance(unit.transform.position, this.transform.position) <= m_attackRange;
 
-        UIManager.Instance.SpawnTextPopup(target.GetTopPosition(), m_damage.ToString(), Color.red);
+    private void DealDamage(int damage, HealthController targetHealth)
+    {
+        targetHealth.TakeDamage(damage);
     }
 
-    private IEnumerator IE_DelayDamage(float delay, int damage, Unit target)
+    private IEnumerator IE_DelayDamage(float delay, int damage, HealthController targetHealth)
     {
         yield return new WaitForSeconds(delay);
 
-        TakeDamage(damage, target);
+        DealDamage(damage, targetHealth);
     }
 
     private void PerformAttackAnimation(Vector3 targetPosition)
@@ -58,11 +61,11 @@ public class MeleeAttack : MonoBehaviour, IActionNode
 
         if (Mathf.Abs(atkDirection.x) > Mathf.Abs(atkDirection.y))
         {
-            m_animator.SetTrigger(HORIZONTAL_ATK);
+            m_animator.SetTrigger(AnimatorParameter.HORIZONTAL_ATK_TRIG);
         }
         else
         {
-            m_animator.SetTrigger(atkDirection.y < 0 ? DOWN_ATK : UP_ATK);
+            m_animator.SetTrigger(atkDirection.y < 0 ? AnimatorParameter.DOWN_ATK_TRIG : AnimatorParameter.UP_ATK_TRIG);
         }
     }
 
@@ -70,12 +73,11 @@ public class MeleeAttack : MonoBehaviour, IActionNode
     {
         Unit target = blackboard.Get<Unit>(Blackboard.CLASS_TARGET);
 
-        bool isInAtkRange = Vector2.Distance(target.transform.position, this.transform.position) <= m_attackRange;
+        bool isInAtkRange = IsInAttackRange(target);
 
         if (!isInAtkRange) return EStatusNode.FAILURE;
 
-        TryToAttack(target);
-        onSuccess?.Invoke();
+        onSuccess();
         return EStatusNode.SUCCESS;
     }
 }

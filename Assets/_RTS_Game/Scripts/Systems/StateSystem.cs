@@ -1,9 +1,18 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class EnumSystem<T> where T : Enum
 {
-    public T Value { get; private set; }
+    [SerializeField] private T m_value;
+    public T Value
+    {
+        get => m_value;
+        private set
+        {
+            m_value = value;
+        }
+    }
 
     public event Action<T> OnValueChange;
 

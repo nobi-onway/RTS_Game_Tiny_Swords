@@ -1,12 +1,10 @@
 using UnityEngine;
 
-public enum EWorkerTask { None, Build }
-
 public class WorkerUnit : HumanoidUnit
 {
     [SerializeField]
     private BuildingUnit m_targetBuilding => target?.GetComponent<BuildingUnit>();
-
+    [SerializeField]
     private EnumSystem<EWorkerTask> m_taskSystem = new();
 
     public EWorkerTask CurrentTask => m_taskSystem.Value;
@@ -50,6 +48,11 @@ public class WorkerUnit : HumanoidUnit
         m_stateSystem.SetValue(EUnitState.IDLE, EUnitState.BUILDING);
     }
 
+    protected override void HandleOnScanned(Unit unit)
+    {
+
+    }
+
     public void AssignToBuildProcess(BuildingUnit targetBuilding)
     {
         if (targetBuilding == null) return;
@@ -57,22 +60,27 @@ public class WorkerUnit : HumanoidUnit
         SetTarget(targetBuilding);
         MoveTo(targetBuilding.transform.position + Vector3.up * 1.5f);
 
-        m_taskSystem.SetValue(EWorkerTask.Build);
+        m_taskSystem.SetValue(EWorkerTask.BUILD);
+
+        UIManager.Instance.DisplayInteractEffect(GeneralUtils.GetTopPosition(targetBuilding.transform), EInteractType.BUILD);
     }
 
     public void UnassignFromBuildProcess()
     {
         SetTarget(null);
-        m_taskSystem.SetValue(EWorkerTask.None);
+        m_taskSystem.SetValue(EWorkerTask.NONE);
         m_stateSystem.SetValue(EUnitState.BUILDING, EUnitState.IDLE);
     }
 
     public override bool TryInteractWithOtherUnit(Unit unit)
     {
+        if (!base.TryInteractWithOtherUnit(unit)) return false;
+
         if (unit is not BuildingUnit buildingUnit) return false;
         if (!buildingUnit.IsUnderConstruct) return false;
 
         buildingUnit.AssignWorkerUnit(this);
+
         return true;
     }
 }

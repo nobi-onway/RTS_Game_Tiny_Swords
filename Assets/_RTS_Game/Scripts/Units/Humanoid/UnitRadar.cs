@@ -3,13 +3,10 @@ using UnityEngine;
 
 public class UnitRadar : MonoBehaviour, IActionNode
 {
-    [SerializeField]
-    private EUnitClass m_unitClass;
-    [SerializeField]
-    private float m_objectDetectionRadius;
+    [SerializeField] private EUnitClass m_unitClass;
+    [SerializeField] private float m_objectDetectionRadius;
     [SerializeField] private float m_unitDetectionCheckRate;
     private float m_nextUnitDetectionTime;
-    [SerializeField]
     private Unit m_detectedUnit;
 
     public event Action<Unit> OnScanned;
@@ -24,13 +21,13 @@ public class UnitRadar : MonoBehaviour, IActionNode
 
         m_nextUnitDetectionTime = Time.time + m_unitDetectionCheckRate;
 
-        if (TryFindClosestUnit(out Unit closestUnit)) { Debug.Log($"{this.gameObject.name} detect unit: {closestUnit.gameObject.name}"); }
+        if (TryFindClosestFoe(out Unit closestUnit)) { Debug.Log($"{this.gameObject.name} detect unit: {closestUnit.gameObject.name}"); }
 
         m_detectedUnit = closestUnit;
         OnScanned?.Invoke(closestUnit);
     }
 
-    private bool TryFindClosestUnit(out Unit foe)
+    private bool TryFindClosestFoe(out Unit foe)
     {
         foe = GameManager.Instance.FindClosestUnit(this.transform.position, m_objectDetectionRadius, m_unitClass);
         return foe != null;
@@ -39,7 +36,6 @@ public class UnitRadar : MonoBehaviour, IActionNode
     public EStatusNode Execute(Blackboard blackboard, Action onSuccess)
     {
         bool hasUnit = m_detectedUnit != null;
-
         if (!hasUnit) return EStatusNode.FAILURE;
 
         blackboard.SetValue(Blackboard.CLASS_TARGET, m_detectedUnit);

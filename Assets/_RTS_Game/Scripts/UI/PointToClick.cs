@@ -9,7 +9,7 @@ public class PointToClick : MonoBehaviour
     [Range(0, 1)]
     [SerializeField] private float m_startFade;
     [SerializeField] private AnimationCurve m_animationCurve;
-    private SpriteRenderer m_spriteRenderer;
+    protected SpriteRenderer m_spriteRenderer;
     private Coroutine m_effectCoroutine;
     private Vector3 m_initialScale;
 
@@ -35,7 +35,7 @@ public class PointToClick : MonoBehaviour
             StopCoroutine(m_effectCoroutine);
         }
 
-        m_effectCoroutine = StartCoroutine(IE_Effect(() => m_effectCoroutine = null));
+        m_effectCoroutine = StartCoroutine(IE_Effect(OnEffectComplete));
     }
 
     private IEnumerator IE_Effect(Action onComplete = null)
@@ -53,6 +53,11 @@ public class PointToClick : MonoBehaviour
         }
 
         onComplete?.Invoke();
+    }
+
+    protected virtual void OnEffectComplete()
+    {
+        m_effectCoroutine = null;
     }
 
     private void FadeOut(float timer)

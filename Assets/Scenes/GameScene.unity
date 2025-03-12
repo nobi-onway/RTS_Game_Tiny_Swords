@@ -1453,7 +1453,7 @@ Tilemap:
       - {fileID: 7752229987998269982, guid: 88b97c8877d02442e8f48e07c5f75dce, type: 3}
       - {fileID: -4710801888167562894, guid: 88b97c8877d02442e8f48e07c5f75dce, type: 3}
       - {fileID: 6853023835892009477, guid: 88b97c8877d02442e8f48e07c5f75dce, type: 3}
-      m_AnimationSpeed: 10.000001
+      m_AnimationSpeed: 10
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 1, y: -5, z: 0}
@@ -5968,6 +5968,7 @@ GameObject:
   - component: {fileID: 858453069}
   - component: {fileID: 858453068}
   - component: {fileID: 858453070}
+  - component: {fileID: 858453071}
   m_Layer: 0
   m_Name: Goblin
   m_TagString: Untagged
@@ -6021,7 +6022,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -4230181108591323607, guid: 0b1f0c3977a58401496af488c843584f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 3, y: 3}
@@ -6118,6 +6119,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_objectDetectionRadius: 2
   target: {fileID: 0}
+  m_stateSystem:
+    m_value: 0
 --- !u!114 &858453067
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6130,7 +6133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3ee326c428c1e4db23ee46564a64b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 3
+  m_speed: 0
   m_currentPath: []
 --- !u!114 &858453068
 MonoBehaviour:
@@ -6147,7 +6150,6 @@ MonoBehaviour:
   m_unitClass: 0
   m_objectDetectionRadius: 3
   m_unitDetectionCheckRate: 0.5
-  m_detectedUnit: {fileID: 0}
 --- !u!114 &858453069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6172,9 +6174,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7be40adf67e1ae48b3e209fb300bc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 0
+  m_damage: 1
   m_attackRange: 1
-  m_attackCoolDownTime: 1
+  m_attackCoolDownTime: 1.5
+  m_attackDamageDelay: 0.6
+--- !u!114 &858453071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858453061}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 100
+  m_currentHealth: 0
+  m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
+  m_flashDamageEffectDuration: 0.2
+  m_flashCount: 2
 --- !u!1 &900531410
 GameObject:
   m_ObjectHideFlags: 0
@@ -6220,6 +6240,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_pointToClickPrefab: {fileID: 7381846992925795592, guid: b81c6c16a1160f346b393bba39c29e6b, type: 3}
+  m_pointToInteractPrefab: {fileID: 7789205820261656888, guid: 86117669e0f1e84439df9ed950b7a178, type: 3}
+  m_interactTypeToSpriteList:
+  - interactType: 0
+    sprite: {fileID: 7723507555042334362, guid: d3f5c0936d7f36d439ad289c675bfa5f, type: 3}
+  - interactType: 1
+    sprite: {fileID: -7405286937500457954, guid: d3f5c0936d7f36d439ad289c675bfa5f, type: 3}
   m_textPopupPrefab: {fileID: 8881454423644227122, guid: 36c89942702d31d42ad717bad151d450, type: 3}
   m_actionBar: {fileID: 2145518368}
   m_confirmationBar: {fileID: 676578429}
@@ -6658,6 +6684,7 @@ GameObject:
   - component: {fileID: 1138707541}
   - component: {fileID: 1138707542}
   - component: {fileID: 1138707543}
+  - component: {fileID: 1138707544}
   m_Layer: 0
   m_Name: Builder
   m_TagString: Untagged
@@ -6822,6 +6849,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_objectDetectionRadius: 0.25
   target: {fileID: 0}
+  m_stateSystem:
+    m_value: 0
+  m_taskSystem:
+    m_value: 0
 --- !u!114 &1138707541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6836,6 +6867,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_actionSOArray:
   - {fileID: 11400000, guid: 2d8cacef61e0a1d45a21fd32d317c7f0, type: 2}
+  m_defaultActionSO: {fileID: 11400000, guid: 2d8cacef61e0a1d45a21fd32d317c7f0, type: 2}
+  m_currentActionIdx: 0
 --- !u!114 &1138707542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6863,7 +6896,23 @@ MonoBehaviour:
   m_unitClass: 1
   m_objectDetectionRadius: 0
   m_unitDetectionCheckRate: 0
-  m_detectedUnit: {fileID: 0}
+--- !u!114 &1138707544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138707533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 2
+  m_currentHealth: 0
+  m_damageFlashColor: {r: 1, g: 0.27, b: 0.25, a: 1}
+  m_flashDamageEffectDuration: 0.2
+  m_flashCount: 2
 --- !u!1 &1160769070
 GameObject:
   m_ObjectHideFlags: 0
@@ -9434,6 +9483,8 @@ GameObject:
   - component: {fileID: 1996004663}
   - component: {fileID: 1996004664}
   - component: {fileID: 1996004665}
+  - component: {fileID: 1996004666}
+  - component: {fileID: 1996004667}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -9545,7 +9596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3ee326c428c1e4db23ee46564a64b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 4
+  m_speed: 3
   m_currentPath: []
 --- !u!70 &1996004661
 CapsuleCollider2D:
@@ -9596,8 +9647,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c779e088ad8034ab19109c1ae45214, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_objectDetectionRadius: 0
+  m_objectDetectionRadius: 3
   target: {fileID: 0}
+  m_stateSystem:
+    m_value: 0
+  m_taskSystem:
+    m_value: 0
+  m_stanceSystem:
+    m_value: 0
 --- !u!114 &1996004663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9610,7 +9667,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e578008947f09c48baef57f35053a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_actionSOArray: []
+  m_actionSOArray:
+  - {fileID: 11400000, guid: c4d60d35e0ae3e746a3bd3eb8c7ff94f, type: 2}
+  - {fileID: 11400000, guid: 2e207b3d1a4f18749b8290925ed5b5aa, type: 2}
+  m_defaultActionSO: {fileID: 11400000, guid: c4d60d35e0ae3e746a3bd3eb8c7ff94f, type: 2}
+  m_currentActionIdx: 0
 --- !u!114 &1996004664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9636,9 +9697,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_unitClass: 1
-  m_objectDetectionRadius: 0
-  m_unitDetectionCheckRate: 0
-  m_detectedUnit: {fileID: 0}
+  m_objectDetectionRadius: 3
+  m_unitDetectionCheckRate: 0.5
+--- !u!114 &1996004666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996004655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealth: 100
+  m_currentHealth: 0
+  m_damageFlashColor: {r: 1, g: 0.4166255, b: 0.4009434, a: 1}
+  m_flashDamageEffectDuration: 0.2
+  m_flashCount: 2
+--- !u!114 &1996004667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996004655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7be40adf67e1ae48b3e209fb300bc5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_damage: 1
+  m_attackRange: 1
+  m_attackCoolDownTime: 1.5
+  m_attackDamageDelay: 0.6
 --- !u!1 &2145518363
 GameObject:
   m_ObjectHideFlags: 0
@@ -9692,7 +9785,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.6}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

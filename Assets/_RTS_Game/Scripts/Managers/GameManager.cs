@@ -11,6 +11,8 @@ public class GameManager : SingletonManager<GameManager>
 
     private Dictionary<EUnitClass, List<Unit>> UnitListLookUp;
 
+    public Unit ActiveUnit => m_activeUnit;
+
     protected override void Awake()
     {
         base.Awake();
@@ -81,9 +83,13 @@ public class GameManager : SingletonManager<GameManager>
     public void UnregisterUnit(Unit unit)
     {
         UnitListLookUp[unit.Class].Remove(unit);
+
+        if (unit == m_activeUnit) CancelActiveUnit();
     }
+
     private void SelectNewUnit(Unit unit)
     {
+        if (!IsRegisteredUnit(unit)) return;
         if (!unit.TryGetComponent(out SelectableUnit selectableUnit)) return;
 
         CancelActiveUnit();
@@ -105,6 +111,8 @@ public class GameManager : SingletonManager<GameManager>
     {
         m_activeUnit = unit;
     }
+
+    private bool IsRegisteredUnit(Unit unit) => UnitListLookUp[unit.Class].Contains(unit);
 
     void OnGUI()
     {

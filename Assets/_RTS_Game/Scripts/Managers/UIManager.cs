@@ -1,13 +1,18 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UIManager : SingletonManager<UIManager>
 {
     [Header("UI")]
     [SerializeField] private PointToClick m_pointToClickPrefab;
+    private PointToClick m_pointToClick;
+
+    [SerializeField] private PointToInteract m_pointToInteractPrefab;
+    [SerializeField] private List<InteractTypeToSprite> m_interactTypeToSpriteList = new();
     [SerializeField] private TextPopup m_textPopupPrefab;
     [SerializeField] private ActionBar m_actionBar;
     [SerializeField] private ConfirmationBar m_confirmationBar;
-    private PointToClick m_pointToClick;
 
     public void DisplayClickEffect(Vector2 position)
     {
@@ -16,14 +21,21 @@ public class UIManager : SingletonManager<UIManager>
         m_pointToClick.DisplayAt(position);
     }
 
+    public void DisplayInteractEffect(Vector2 position, EInteractType interactType)
+    {
+        PointToInteract pointToInteractClone = Instantiate(m_pointToInteractPrefab);
+
+        pointToInteractClone.DisplayAt(position, m_interactTypeToSpriteList[(int)interactType].sprite);
+    }
+
     public void HideActionBar()
     {
         m_actionBar.Hide();
     }
 
-    public void ShowActionBar(ActionSO[] actions)
+    public void ShowActionBar(ActionSO[] actions, int curActionIdx)
     {
-        m_actionBar.Show(actions);
+        m_actionBar.Show(actions, curActionIdx);
     }
 
     public void ShowBuildingConfirmationBar(BuildingSO buildingSO)
@@ -43,4 +55,11 @@ public class UIManager : SingletonManager<UIManager>
         textPopupClone.SetText(text, color);
     }
 
+}
+
+[Serializable]
+public struct InteractTypeToSprite
+{
+    public EInteractType interactType;
+    public Sprite sprite;
 }

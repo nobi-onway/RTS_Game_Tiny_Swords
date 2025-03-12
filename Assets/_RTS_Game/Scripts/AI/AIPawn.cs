@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AIPawn : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class AIPawn : MonoBehaviour
     private List<Vector3> m_currentPath = new();
     private int m_currentNodeIndex;
     private SpriteRenderer m_spriteRenderer;
+
+    public UnityAction OnDestinationReached;
 
     private void Awake()
     {
@@ -25,8 +29,8 @@ public class AIPawn : MonoBehaviour
         if (!IsPathValid()) return;
 
         Vector3 targetPosition = m_currentPath[m_currentNodeIndex];
-
         Vector3 direction = (targetPosition - transform.position).normalized;
+
         m_spriteRenderer.flipX = direction.x < 0;
 
         this.transform.position += direction * Time.deltaTime * m_speed;
@@ -36,6 +40,7 @@ public class AIPawn : MonoBehaviour
             if (m_currentNodeIndex == m_currentPath.Count - 1)
             {
                 m_currentPath = null;
+                OnDestinationReached?.Invoke();
             }
             else
             {

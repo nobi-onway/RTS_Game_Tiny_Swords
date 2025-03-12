@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Mover : MonoBehaviour, IActionNode
 {
@@ -13,11 +14,22 @@ public class Mover : MonoBehaviour, IActionNode
     private bool m_isMoving;
 
     public event Action<bool> OnMove;
+    public UnityAction OnDestinationReached;
 
     private void Awake()
     {
         GeneralUtils.SetUpComponent<AIPawn>(this.transform, ref m_AIPawn);
         GeneralUtils.SetUpComponent<Animator>(this.transform, ref m_animator);
+    }
+
+    private void OnEnable()
+    {
+        m_AIPawn.OnDestinationReached += OnDestinationReached;
+    }
+
+    private void OnDisable()
+    {
+        m_AIPawn.OnDestinationReached -= OnDestinationReached;
     }
 
     private void Start()
@@ -54,7 +66,7 @@ public class Mover : MonoBehaviour, IActionNode
 
         OnMove?.Invoke(m_isMoving);
 
-        m_animator.SetFloat("Speed", Mathf.Clamp01(m_smoothSpeed));
+        m_animator.SetFloat(AnimatorParameter.SPEED_F, Mathf.Clamp01(m_smoothSpeed));
     }
 
     public EStatusNode Execute(Blackboard blackboard, Action onSuccess)

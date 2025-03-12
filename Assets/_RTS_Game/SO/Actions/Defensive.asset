@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4306fa78bc73c4f868087616656818, type: 3}
+  m_Name: Defensive
+  m_EditorClassIdentifier: 
+  Icon: {fileID: -5813384638183593889, guid: d3f5c0936d7f36d439ad289c675bfa5f, type: 3}
+  ActionName: Defensive
+  Guid: a5bf27a3-6624-4c82-863d-f17d03751914
+  ActionCardPrefab: {fileID: 5929403556674772170, guid: f4a8c234458c1404f9e73fc3bc32a345, type: 3}
