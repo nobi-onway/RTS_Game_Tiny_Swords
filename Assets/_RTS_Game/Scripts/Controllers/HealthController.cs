@@ -28,6 +28,8 @@ public class HealthController : MonoBehaviour
     [SerializeField] private float m_flashDamageEffectDuration = 0.2f;
     [SerializeField] private int m_flashCount = 2;
 
+    private Coroutine m_flashEffectCoroutine;
+
     private Animator m_animator;
     private SpriteRenderer m_spriteRenderer;
 
@@ -46,7 +48,8 @@ public class HealthController : MonoBehaviour
     {
         CurrentHealth -= damage;
 
-        StartCoroutine(IE_FlashEffect(m_flashDamageEffectDuration, m_flashCount, m_damageFlashColor));
+        m_flashEffectCoroutine ??= StartCoroutine(IE_FlashEffect(m_flashDamageEffectDuration, m_flashCount, m_damageFlashColor));
+
         UIManager.Instance.SpawnTextPopup(GeneralUtils.GetTopPosition(this.transform), damage.ToString(), Color.red);
 
         if (CurrentHealth <= 0) Die();
@@ -64,6 +67,8 @@ public class HealthController : MonoBehaviour
             m_spriteRenderer.color = originalColor;
             yield return new WaitForSeconds(duration / flashCount);
         }
+
+        m_flashEffectCoroutine = null;
     }
 
     private void Die()
