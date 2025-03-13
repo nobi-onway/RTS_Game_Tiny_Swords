@@ -19,12 +19,16 @@ public abstract class Unit : MonoBehaviour
     private CapsuleCollider2D capsuleCollider2D;
     public CapsuleCollider2D Collider => capsuleCollider2D;
 
+    protected UnitRadar m_unitRadar;
+
+
     protected virtual void Awake()
     {
         GeneralUtils.SetUpComponent<Animator>(transform, ref animator);
         GeneralUtils.SetUpComponent<SpriteRenderer>(transform, ref spriteRenderer);
         GeneralUtils.SetUpComponent<HealthController>(transform, ref healthController);
         GeneralUtils.SetUpComponent<CapsuleCollider2D>(transform, ref capsuleCollider2D);
+        GeneralUtils.SetUpComponent<UnitRadar>(this.transform, ref m_unitRadar);
     }
     protected virtual void Start()
     {
@@ -34,11 +38,13 @@ public abstract class Unit : MonoBehaviour
     protected virtual void OnEnable()
     {
         healthController.OnDead += HandleOnDead;
+        m_unitRadar.OnScanned += HandleOnScanned;
     }
 
     protected virtual void OnDisable()
     {
         healthController.OnDead -= HandleOnDead;
+        m_unitRadar.OnScanned -= HandleOnScanned;
     }
 
     protected void SetTarget(Unit unit)
@@ -48,12 +54,7 @@ public abstract class Unit : MonoBehaviour
         HandleOnSetTarget(unit);
     }
 
-    protected virtual void HandleOnSetTarget(Unit target)
-    {
-        if (target == null) return;
-
-        spriteRenderer.flipX = (target.transform.position - this.transform.position).normalized.x < 0;
-    }
+    protected virtual void HandleOnSetTarget(Unit target) { }
 
     private Collider2D[] RunProximityObjectDetection()
     {
@@ -80,7 +81,15 @@ public abstract class Unit : MonoBehaviour
     {
         m_stateSystem.SetValue(EUnitState.DEAD);
 
+        m_unitRadar.Enabled = false;
+        SetTarget(null);
+
         GameManager.Instance.UnregisterUnit(this);
+    }
+
+    protected virtual void HandleOnScanned(Unit unit)
+    {
+        SetTarget(unit);
     }
 
     //ANIMATION EVENT

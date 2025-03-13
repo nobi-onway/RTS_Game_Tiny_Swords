@@ -45,6 +45,7 @@ public class AIPawn : MonoBehaviour
         this.transform.position += combinedDirection * Time.deltaTime * m_speed;
         m_spriteRenderer.flipX = direction.x < 0;
 
+
         if (Vector2.Distance(targetPosition, transform.position) < 0.1f)
         {
             if (m_currentNodeIndex == m_currentPath.Count - 1)
@@ -72,7 +73,7 @@ public class AIPawn : MonoBehaviour
 
         if (m_currentPath != null && m_currentPath.Count > 0)
         {
-            PathNode newEndNode = pathFinding.FindNode(destination.Value);
+            PathNode newEndNode = pathFinding.FindClosestPathNode(destination.Value, m_currentPath[^1]);
             if (newEndNode == null) return;
 
             Vector3 endDestination = new Vector3(newEndNode.centerX, newEndNode.centerY);

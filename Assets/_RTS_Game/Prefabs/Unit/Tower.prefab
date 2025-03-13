@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5955148423829012929}
   - component: {fileID: -1292216070053026723}
   - component: {fileID: 7263403559304584814}
+  - component: {fileID: 5345223578845623207}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -51,6 +52,7 @@ MonoBehaviour:
   target: {fileID: 0}
   m_stateSystem:
     m_value: 0
+  m_attackDamage: 2
 --- !u!70 &5955148423829012929
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -115,8 +117,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 100
+  m_maxHealth: 10
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2
   m_flashCount: 2
+--- !u!114 &5345223578845623207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3633860544362329909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 219a0ca878d0a354a99e528087decdda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_unitClass: 1
+  m_objectDetectionRadius: 5
+  m_unitDetectionCheckRate: 1.5
+  Enabled: 1

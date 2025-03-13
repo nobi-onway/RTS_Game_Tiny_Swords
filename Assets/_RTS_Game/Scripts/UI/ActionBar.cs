@@ -17,7 +17,7 @@ public class ActionBar : MonoBehaviour
             m_actionCardList.Add(actionCardClone);
         }
 
-        FocusAction(curActionIdx);
+        if (actions.Length > 0) FocusAction(curActionIdx);
     }
 
     private void FocusAction(int idx)

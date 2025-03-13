@@ -3,14 +3,12 @@ using UnityEngine;
 public class HumanoidUnit : Unit
 {
     protected Mover m_mover;
-    protected UnitRadar m_unitRadar;
 
     protected override void Awake()
     {
         base.Awake();
 
         GeneralUtils.SetUpComponent<Mover>(this.transform, ref m_mover);
-        GeneralUtils.SetUpComponent<UnitRadar>(this.transform, ref m_unitRadar);
     }
 
     protected override void OnEnable()
@@ -18,7 +16,6 @@ public class HumanoidUnit : Unit
         base.OnEnable();
 
         m_mover.OnMove += ToMoveStateIf;
-        m_unitRadar.OnScanned += HandleOnScanned;
     }
 
     protected override void OnDisable()
@@ -26,7 +23,6 @@ public class HumanoidUnit : Unit
         base.OnDisable();
 
         m_mover.OnMove -= ToMoveStateIf;
-        m_unitRadar.OnScanned -= HandleOnScanned;
     }
 
     private void FixedUpdate()
@@ -44,7 +40,7 @@ public class HumanoidUnit : Unit
     {
         base.HandleOnSetTarget(target);
 
-        if (target == null) m_mover.StopMove();
+        // if (target == null) m_mover.StopMove();
     }
 
     protected override void HandleOnDead()
@@ -52,11 +48,6 @@ public class HumanoidUnit : Unit
         base.HandleOnDead();
 
         m_mover.StopMove();
-    }
-
-    protected virtual void HandleOnScanned(Unit unit)
-    {
-        SetTarget(unit);
     }
 
     public override void DoActionAt(Vector2 position)

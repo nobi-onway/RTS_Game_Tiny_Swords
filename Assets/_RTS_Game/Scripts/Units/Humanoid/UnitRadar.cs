@@ -8,10 +8,12 @@ public class UnitRadar : MonoBehaviour, IActionNode
     [SerializeField] private float m_unitDetectionCheckRate;
     private float m_nextUnitDetectionTime;
     private Unit m_detectedUnit;
+    public bool Enabled = true;
 
     public event Action<Unit> OnScanned;
     private void Update()
     {
+        if (!Enabled) return;
         Scan(OnScanned);
     }
 

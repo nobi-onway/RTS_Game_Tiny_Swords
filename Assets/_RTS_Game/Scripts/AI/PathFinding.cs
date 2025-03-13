@@ -226,4 +226,28 @@ public class PathFinding
 
         return null;
     }
+
+    public PathNode FindClosestPathNode(Vector3 position, Vector3 to)
+    {
+        PathNode pathNode = FindNode(position);
+        PathNode endNode = FindNode(to);
+        List<PathNode> neighbors = GetNeighbors(pathNode);
+
+        float closestDistanceToEnd = GetDistance(pathNode, endNode);
+
+        foreach (PathNode node in neighbors)
+        {
+            if (!node.isWalkable) continue;
+
+            float distance = GetDistance(node, endNode);
+
+            if (distance < closestDistanceToEnd)
+            {
+                pathNode = node;
+                closestDistanceToEnd = distance;
+            }
+        }
+
+        return pathNode;
+    }
 }

@@ -19,6 +19,7 @@ MonoBehaviour:
   m_woodCost: 111111
   m_buildingSize: {x: 2, y: 3}
   m_buildingOffset: {x: -1, y: 0, z: 0}
-  m_buildingTime: 5
+  m_buildingTime: 1
   m_buildingUnitPrefab: {fileID: 252579404393314171, guid: fceb461e21e07f94b91f407730a3a0d9, type: 3}
   m_constructEffectPrefab: {fileID: 711042499609720081, guid: c99be994d72ccc749887e37f9c66c5aa, type: 3}
+  m_projectilePrefab: {fileID: -4054903785003771611, guid: 052d68e8aaa223c48ab57441b4f65b25, type: 3}

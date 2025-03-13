@@ -44,6 +44,11 @@ public class EnemyUnit : HumanoidUnit
 
         bool isUnderAttacking = m_meleeAttack.TryToAttack(target);
 
+        if (isUnderAttacking)
+        {
+            spriteRenderer.flipX = (target.transform.position - this.transform.position).normalized.x < 0;
+        }
+
         EUnitState unitState = isUnderAttacking ? EUnitState.ATTACKING : EUnitState.IDLE;
 
         m_stateSystem.SetValue(unitState);

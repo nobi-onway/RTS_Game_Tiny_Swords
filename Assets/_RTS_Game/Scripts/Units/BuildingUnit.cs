@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BuildingUnit : Unit
 {
@@ -8,16 +10,18 @@ public class BuildingUnit : Unit
     public bool IsUnderConstruct => !m_buildingProcess.IsConstructCompleted;
     private CapsuleCollider2D m_collider2D;
 
-    protected override void Start()
-    {
-
-    }
+    [SerializeField] private int m_attackDamage;
 
     protected override void Awake()
     {
         base.Awake();
 
         GeneralUtils.SetUpComponent<CapsuleCollider2D>(transform, ref m_collider2D);
+    }
+
+    protected override void Start()
+    {
+        m_unitRadar.Enabled = false;
     }
 
     private void Update()
@@ -75,7 +79,7 @@ public class BuildingUnit : Unit
 
     public void UpdateBuildingProgress(float progress)
     {
-        m_buildingProcess.Update(progress, UpdateBuildingArea);
+        m_buildingProcess.Update(progress, AfterConstructionUpdated);
     }
 
     public void SetUpBySO(BuildingSO buildingSO, TilemapManager tilemapManager)
@@ -89,10 +93,17 @@ public class BuildingUnit : Unit
                                                 );
     }
 
+    private void AfterConstructionUpdated()
+    {
+        UpdateBuildingArea();
+
+        m_unitRadar.Enabled = true;
+    }
+
     private void UpdateBuildingArea()
     {
-        int buildingWidthInTiles = 6;
-        int buildingHeightInTiles = 6;
+        int buildingWidthInTiles = 2;
+        int buildingHeightInTiles = 3;
 
         float halfWidth = buildingWidthInTiles / 2;
         float halfHeight = buildingHeightInTiles / 2;
@@ -101,6 +112,43 @@ public class BuildingUnit : Unit
         TilemapManager.Instance.PathFinding.UpdateNodesInArea(startPosition, buildingWidthInTiles, buildingHeightInTiles);
 
         UpdateCollider(new Vector2(m_collider2D.size.x, m_collider2D.size.y * 2));
+    }
+
+    protected override void HandleOnScanned(Unit unit)
+    {
+        base.HandleOnScanned(unit);
+
+        if (hasTarget) DoAttack();
+    }
+
+    protected override void HandleOnDead()
+    {
+        base.HandleOnDead();
+
+        StartCoroutine(IE_FadeOut(UpdateBuildingArea));
+    }
+
+    private IEnumerator IE_FadeOut(UnityAction onComplete)
+    {
+        float alpha = 1.0f;
+
+        while (alpha > 0)
+        {
+            alpha -= Time.deltaTime;
+            spriteRenderer.color = new Color(1, 1, 1, alpha);
+            yield return null;
+        }
+
+        Destroy(gameObject);
+
+        onComplete?.Invoke();
+    }
+
+    private void DoAttack()
+    {
+        Projectile projectileClone = Instantiate(m_buildingSO.ProjectilePrefab, GeneralUtils.GetTopPosition(this.transform) + Vector3.up * 1.5f, Quaternion.identity);
+
+        projectileClone.Initialize(this, target, m_attackDamage);
     }
 
     public override bool TryInteractWithOtherUnit(Unit unit)

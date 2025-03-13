@@ -373,7 +373,7 @@ Tilemap:
       - {fileID: -3089720072195947750, guid: c4bd016b99f2643f19445d5602d344c3, type: 3}
       - {fileID: 6910502441185169791, guid: c4bd016b99f2643f19445d5602d344c3, type: 3}
       - {fileID: -8412000465415408234, guid: c4bd016b99f2643f19445d5602d344c3, type: 3}
-      m_AnimationSpeed: 10.000001
+      m_AnimationSpeed: 10
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 5, y: -9, z: 0}
@@ -1393,7 +1393,7 @@ Tilemap:
       - {fileID: 7752229987998269982, guid: 88b97c8877d02442e8f48e07c5f75dce, type: 3}
       - {fileID: -4710801888167562894, guid: 88b97c8877d02442e8f48e07c5f75dce, type: 3}
       - {fileID: 6853023835892009477, guid: 88b97c8877d02442e8f48e07c5f75dce, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -3, y: -5, z: 0}
@@ -6040,7 +6040,7 @@ Transform:
   m_GameObject: {fileID: 858453061}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.88, y: 0, z: 0}
+  m_LocalPosition: {x: 7.57, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6133,7 +6133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3ee326c428c1e4db23ee46564a64b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 2
+  m_speed: 1
   m_currentPath: []
   m_separationRadius: 0.5
   m_separationForce: 1
@@ -6151,8 +6151,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_unitClass: 0
-  m_objectDetectionRadius: 3
+  m_objectDetectionRadius: 6
   m_unitDetectionCheckRate: 0.5
+  Enabled: 1
 --- !u!114 &858453069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6178,7 +6179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 1
-  m_attackRange: 0.6
+  m_attackRange: 1
   m_attackCoolDownTime: 1.5
   m_attackDamageDelay: 0.6
 --- !u!114 &858453071
@@ -6193,7 +6194,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 10
+  m_maxHealth: 100
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2
@@ -6289,7 +6290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 10
+  m_maxHealth: 100
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2
@@ -6307,7 +6308,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 1
-  m_attackRange: 0.6
+  m_attackRange: 1
   m_attackCoolDownTime: 1.5
   m_attackDamageDelay: 0.6
 --- !u!114 &933434570
@@ -6323,8 +6324,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_unitClass: 0
-  m_objectDetectionRadius: 3
+  m_objectDetectionRadius: 6
   m_unitDetectionCheckRate: 0.5
+  Enabled: 1
 --- !u!114 &933434571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6349,7 +6351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3ee326c428c1e4db23ee46564a64b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 2
+  m_speed: 1
   m_currentPath: []
   m_separationRadius: 0.5
   m_separationForce: 1
@@ -6493,7 +6495,7 @@ Transform:
   m_GameObject: {fileID: 933434567}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.4, y: -1.26, z: 0}
+  m_LocalPosition: {x: 8.09, y: -1.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7149,6 +7151,7 @@ MonoBehaviour:
   m_unitClass: 1
   m_objectDetectionRadius: 0
   m_unitDetectionCheckRate: 0
+  Enabled: 1
 --- !u!114 &1138707544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9333,7 +9336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 10
+  m_maxHealth: 100
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2
@@ -9351,7 +9354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 1
-  m_attackRange: 0.6
+  m_attackRange: 1
   m_attackCoolDownTime: 1.5
   m_attackDamageDelay: 0.6
 --- !u!114 &1916526042
@@ -9367,8 +9370,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_unitClass: 0
-  m_objectDetectionRadius: 3
+  m_objectDetectionRadius: 6
   m_unitDetectionCheckRate: 0.5
+  Enabled: 1
 --- !u!114 &1916526043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9393,7 +9397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3ee326c428c1e4db23ee46564a64b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 2
+  m_speed: 1
   m_currentPath: []
   m_separationRadius: 0.5
   m_separationForce: 1
@@ -9537,7 +9541,7 @@ Transform:
   m_GameObject: {fileID: 1916526039}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.27, y: 1.41, z: 0}
+  m_LocalPosition: {x: 7.96, y: 1.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10202,6 +10206,7 @@ MonoBehaviour:
   m_unitClass: 1
   m_objectDetectionRadius: 3
   m_unitDetectionCheckRate: 0.5
+  Enabled: 1
 --- !u!114 &1996004666
 MonoBehaviour:
   m_ObjectHideFlags: 0
