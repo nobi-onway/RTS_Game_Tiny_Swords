@@ -11,12 +11,19 @@ public class AIPawn : MonoBehaviour
     private List<Vector3> m_currentPath = new();
     private int m_currentNodeIndex;
     private SpriteRenderer m_spriteRenderer;
-
     public UnityAction OnDestinationReached;
+
+    private Unit m_unit;
+
+    [Header("Separation")]
+    [SerializeField] private float m_separationRadius;
+    [SerializeField] private float m_separationForce;
+    [SerializeField] private bool m_enableSeparation = true;
 
     private void Awake()
     {
         GeneralUtils.SetUpComponent<SpriteRenderer>(this.transform, ref m_spriteRenderer);
+        GeneralUtils.SetUpComponent<Unit>(this.transform, ref m_unit);
     }
 
     private void FixedUpdate()
@@ -28,12 +35,15 @@ public class AIPawn : MonoBehaviour
     {
         if (!IsPathValid()) return;
 
+        Vector3 separationDirection = m_enableSeparation ? CalculateSeparation() : Vector3.zero;
+
         Vector3 targetPosition = m_currentPath[m_currentNodeIndex];
         Vector3 direction = (targetPosition - transform.position).normalized;
 
-        m_spriteRenderer.flipX = direction.x < 0;
+        Vector3 combinedDirection = (direction + separationDirection).normalized;
 
-        this.transform.position += direction * Time.deltaTime * m_speed;
+        this.transform.position += combinedDirection * Time.deltaTime * m_speed;
+        m_spriteRenderer.flipX = direction.x < 0;
 
         if (Vector2.Distance(targetPosition, transform.position) < 0.1f)
         {
@@ -71,6 +81,29 @@ public class AIPawn : MonoBehaviour
 
         m_currentPath = pathFinding.FindPath(this.transform.position, destination.Value);
         m_currentNodeIndex = 0;
+    }
+
+    private Vector3 CalculateSeparation()
+    {
+        Vector3 separationVector = Vector3.zero;
+        float separationRadiusSqr = m_separationRadius * m_separationRadius;
+
+        List<Unit> units = GameManager.Instance.GetUnits(m_unit.Class);
+
+        foreach (Unit unit in units)
+        {
+            if (unit == m_unit) continue;
+
+            Vector3 oppositeDirection = this.transform.position - unit.transform.position;
+            float sqrDistance = oppositeDirection.sqrMagnitude;
+
+            if (sqrDistance < separationRadiusSqr && sqrDistance > 0)
+            {
+                separationVector += oppositeDirection.normalized / sqrDistance;
+            }
+        }
+
+        return separationVector * m_separationForce;
     }
 
     private bool IsPathValid()

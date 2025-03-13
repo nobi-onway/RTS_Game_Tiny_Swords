@@ -8,6 +8,11 @@ public class BuildingUnit : Unit
     public bool IsUnderConstruct => !m_buildingProcess.IsConstructCompleted;
     private CapsuleCollider2D m_collider2D;
 
+    protected override void Start()
+    {
+
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -50,6 +55,7 @@ public class BuildingUnit : Unit
                                                 );
             m_buildingProcess.TryAddWorker(workerUnit, this);
 
+            GameManager.Instance.RegisterUnit(this);
             return true;
         }
 

@@ -16,12 +16,15 @@ public abstract class Unit : MonoBehaviour
     [SerializeField]
     protected EnumSystem<EUnitState> m_stateSystem = new();
     public EUnitState CurrentState => m_stateSystem.Value;
+    private CapsuleCollider2D capsuleCollider2D;
+    public CapsuleCollider2D Collider => capsuleCollider2D;
 
     protected virtual void Awake()
     {
         GeneralUtils.SetUpComponent<Animator>(transform, ref animator);
         GeneralUtils.SetUpComponent<SpriteRenderer>(transform, ref spriteRenderer);
         GeneralUtils.SetUpComponent<HealthController>(transform, ref healthController);
+        GeneralUtils.SetUpComponent<CapsuleCollider2D>(transform, ref capsuleCollider2D);
     }
     protected virtual void Start()
     {
@@ -41,6 +44,15 @@ public abstract class Unit : MonoBehaviour
     protected void SetTarget(Unit unit)
     {
         target = unit;
+
+        HandleOnSetTarget(unit);
+    }
+
+    protected virtual void HandleOnSetTarget(Unit target)
+    {
+        if (target == null) return;
+
+        spriteRenderer.flipX = (target.transform.position - this.transform.position).normalized.x < 0;
     }
 
     private Collider2D[] RunProximityObjectDetection()

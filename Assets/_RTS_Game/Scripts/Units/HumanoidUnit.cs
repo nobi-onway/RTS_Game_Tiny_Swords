@@ -40,6 +40,13 @@ public class HumanoidUnit : Unit
         m_stateSystem.SetValue(EUnitState.MOVING);
     }
 
+    protected override void HandleOnSetTarget(Unit target)
+    {
+        base.HandleOnSetTarget(target);
+
+        if (target == null) m_mover.StopMove();
+    }
+
     protected override void HandleOnDead()
     {
         base.HandleOnDead();

@@ -53,6 +53,13 @@ public class WorkerUnit : HumanoidUnit
 
     }
 
+    protected override void HandleOnDead()
+    {
+        m_targetBuilding?.UnassignWorkerUnit(this);
+
+        base.HandleOnDead();
+    }
+
     public void AssignToBuildProcess(BuildingUnit targetBuilding)
     {
         if (targetBuilding == null) return;

@@ -41,4 +41,10 @@ public class UnitRadar : MonoBehaviour, IActionNode
         blackboard.SetValue(Blackboard.CLASS_TARGET, m_detectedUnit);
         return EStatusNode.SUCCESS;
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 0, 1, 0.25f);
+        Gizmos.DrawSphere(this.transform.position, m_objectDetectionRadius);
+    }
 }

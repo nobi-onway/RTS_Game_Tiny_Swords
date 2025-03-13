@@ -373,7 +373,7 @@ Tilemap:
       - {fileID: -3089720072195947750, guid: c4bd016b99f2643f19445d5602d344c3, type: 3}
       - {fileID: 6910502441185169791, guid: c4bd016b99f2643f19445d5602d344c3, type: 3}
       - {fileID: -8412000465415408234, guid: c4bd016b99f2643f19445d5602d344c3, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: 5, y: -9, z: 0}
@@ -6135,6 +6135,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speed: 2
   m_currentPath: []
+  m_separationRadius: 0.5
+  m_separationForce: 1
+  m_enableSeparation: 1
 --- !u!114 &858453068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6175,7 +6178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 1
-  m_attackRange: 1
+  m_attackRange: 0.6
   m_attackCoolDownTime: 1.5
   m_attackDamageDelay: 0.6
 --- !u!114 &858453071
@@ -6190,7 +6193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 100
+  m_maxHealth: 10
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2
@@ -6286,7 +6289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 100
+  m_maxHealth: 10
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2
@@ -6304,7 +6307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 1
-  m_attackRange: 1
+  m_attackRange: 0.6
   m_attackCoolDownTime: 1.5
   m_attackDamageDelay: 0.6
 --- !u!114 &933434570
@@ -6348,6 +6351,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speed: 2
   m_currentPath: []
+  m_separationRadius: 0.5
+  m_separationForce: 1
+  m_enableSeparation: 1
 --- !u!114 &933434573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7042,6 +7048,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speed: 2
   m_currentPath: []
+  m_separationRadius: 0
+  m_separationForce: 0
+  m_enableSeparation: 0
 --- !u!70 &1138707539
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -7152,7 +7161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 2
+  m_maxHealth: 20
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.27, b: 0.25, a: 1}
   m_flashDamageEffectDuration: 0.2
@@ -9324,7 +9333,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxHealth: 100
+  m_maxHealth: 10
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2
@@ -9342,7 +9351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 1
-  m_attackRange: 1
+  m_attackRange: 0.6
   m_attackCoolDownTime: 1.5
   m_attackDamageDelay: 0.6
 --- !u!114 &1916526042
@@ -9386,6 +9395,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speed: 2
   m_currentPath: []
+  m_separationRadius: 0.5
+  m_separationForce: 1
+  m_enableSeparation: 1
 --- !u!114 &1916526045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10066,7 +10078,7 @@ Transform:
   m_GameObject: {fileID: 1996004655}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5.16, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10086,6 +10098,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speed: 3
   m_currentPath: []
+  m_separationRadius: 0
+  m_separationForce: 0
+  m_enableSeparation: 0
 --- !u!70 &1996004661
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -10216,8 +10231,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7be40adf67e1ae48b3e209fb300bc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 1
-  m_attackRange: 1
+  m_damage: 3
+  m_attackRange: 0.6
   m_attackCoolDownTime: 1.5
   m_attackDamageDelay: 0.6
 --- !u!1 &2145518363

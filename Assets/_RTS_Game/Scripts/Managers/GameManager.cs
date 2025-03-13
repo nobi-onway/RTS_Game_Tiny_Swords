@@ -87,6 +87,8 @@ public class GameManager : SingletonManager<GameManager>
         if (unit == m_activeUnit) CancelActiveUnit();
     }
 
+    public List<Unit> GetUnits(EUnitClass eUnitClass) => UnitListLookUp[eUnitClass];
+
     private void SelectNewUnit(Unit unit)
     {
         if (!IsRegisteredUnit(unit)) return;

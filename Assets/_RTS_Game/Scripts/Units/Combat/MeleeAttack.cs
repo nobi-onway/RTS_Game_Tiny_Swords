@@ -41,7 +41,14 @@ public class MeleeAttack : MonoBehaviour, IActionNode
         return true;
     }
 
-    public bool IsInAttackRange(Unit unit) => Vector2.Distance(unit.transform.position, this.transform.position) <= m_attackRange;
+    public bool IsInAttackRange(Unit target)
+    {
+        Collider2D targetCollider = target.Collider;
+        Vector3 closestPoint = targetCollider.ClosestPoint(this.transform.position);
+
+        return Vector2.Distance(closestPoint, this.transform.position) <= m_attackRange;
+    }
+
 
     private void DealDamage(int damage, HealthController targetHealth)
     {
@@ -79,5 +86,11 @@ public class MeleeAttack : MonoBehaviour, IActionNode
 
         onSuccess();
         return EStatusNode.SUCCESS;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.25f);
+        Gizmos.DrawSphere(this.transform.position, m_attackRange);
     }
 }
