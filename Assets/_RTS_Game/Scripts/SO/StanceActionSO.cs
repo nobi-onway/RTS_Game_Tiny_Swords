@@ -3,8 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "SO/ActionSO/StanceAction", fileName = "ActionSO")]
 public class StanceActionSO : ActionSO
 {
-    [SerializeField] private EWarriorStance m_warriorStance;
-    public EWarriorStance WarriorStance => m_warriorStance;
+    [SerializeField] private ECombatStance m_warriorStance;
+    public ECombatStance WarriorStance => m_warriorStance;
 
     public override void Execute()
     {

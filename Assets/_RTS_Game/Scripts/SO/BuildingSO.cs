@@ -10,7 +10,6 @@ public class BuildingSO : ScriptableObject
     [SerializeField] private float m_buildingTime;
     [SerializeField] private BuildingUnit m_buildingUnitPrefab;
     [SerializeField] private ParticleSystem m_constructEffectPrefab;
-    [SerializeField] private Projectile m_projectilePrefab;
 
     public Sprite PlacementSprite => m_placementSprite;
     public Sprite FoundationSprite => m_foundationSprite;
@@ -22,5 +21,4 @@ public class BuildingSO : ScriptableObject
     public float BuildingTime => m_buildingTime;
     public BuildingUnit BuildingUnitPrefab => m_buildingUnitPrefab;
     public ParticleSystem BuildingEffectPrefab => m_constructEffectPrefab;
-    public Projectile ProjectilePrefab => m_projectilePrefab;
 }

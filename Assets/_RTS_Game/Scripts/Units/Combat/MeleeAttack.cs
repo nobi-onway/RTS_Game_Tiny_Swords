@@ -3,52 +3,18 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class MeleeAttack : MonoBehaviour, IActionNode
+public class MeleeAttack : Attack
 {
-    [SerializeField] private int m_damage;
-    [SerializeField] private float m_attackRange;
-    [SerializeField] private float m_attackCoolDownTime;
     [SerializeField] private float m_attackDamageDelay = 0.5f;
-    private float m_currentCoolDownTime;
-    private Animator m_animator;
 
-    private void Start()
+    public override bool TryToAttack(Unit unit)
     {
-        GeneralUtils.SetUpComponent<Animator>(this.transform, ref m_animator);
-    }
-
-    private void FixedUpdate()
-    {
-        if (m_currentCoolDownTime < m_attackCoolDownTime) m_currentCoolDownTime += Time.deltaTime;
-    }
-
-    public bool TryToAttack(Unit unit)
-    {
-        bool isInCoolDownTime = m_currentCoolDownTime < m_attackCoolDownTime;
-        if (isInCoolDownTime) return false;
-
-        bool isTargetDead = unit.CurrentState == EUnitState.DEAD;
-        if (isTargetDead) return false;
-
-        bool hasHealth = unit.TryGetComponent(out HealthController healthController);
-        if (!hasHealth) return false;
-
-        PerformAttackAnimation(unit.transform.position);
+        if (!TryToAttack(unit, out HealthController healthController)) return false;
 
         StartCoroutine(IE_DelayDamage(m_attackDamageDelay, m_damage, healthController));
 
-        m_currentCoolDownTime = 0;
         return true;
     }
-
-    public bool IsInAttackRange(Unit target)
-    {
-        Collider2D targetCollider = target.Collider;
-        Vector3 closestPoint = targetCollider.ClosestPoint(this.transform.position);
-
-        return Vector2.Distance(closestPoint, this.transform.position) <= m_attackRange;
-    }
-
 
     private void DealDamage(int damage, HealthController targetHealth)
     {
@@ -62,8 +28,10 @@ public class MeleeAttack : MonoBehaviour, IActionNode
         DealDamage(damage, targetHealth);
     }
 
-    private void PerformAttackAnimation(Vector3 targetPosition)
+    protected override void PerformAttackAnimation(Vector3 targetPosition)
     {
+        base.PerformAttackAnimation(targetPosition);
+
         Vector2 atkDirection = (targetPosition - this.transform.position).normalized;
 
         if (Mathf.Abs(atkDirection.x) > Mathf.Abs(atkDirection.y))
@@ -76,7 +44,7 @@ public class MeleeAttack : MonoBehaviour, IActionNode
         }
     }
 
-    public EStatusNode Execute(Blackboard blackboard, Action onSuccess)
+    public override EStatusNode Execute(Blackboard blackboard, Action onSuccess)
     {
         Unit target = blackboard.Get<Unit>(Blackboard.CLASS_TARGET);
 
@@ -86,11 +54,5 @@ public class MeleeAttack : MonoBehaviour, IActionNode
 
         onSuccess();
         return EStatusNode.SUCCESS;
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(1, 0, 0, 0.25f);
-        Gizmos.DrawSphere(this.transform.position, m_attackRange);
     }
 }

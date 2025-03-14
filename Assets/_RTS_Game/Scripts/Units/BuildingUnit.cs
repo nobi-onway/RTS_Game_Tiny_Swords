@@ -10,13 +10,13 @@ public class BuildingUnit : Unit
     public bool IsUnderConstruct => !m_buildingProcess.IsConstructCompleted;
     private CapsuleCollider2D m_collider2D;
 
-    [SerializeField] private int m_attackDamage;
-
+    private RangeAttack m_rangeAttack;
     protected override void Awake()
     {
         base.Awake();
 
         GeneralUtils.SetUpComponent<CapsuleCollider2D>(transform, ref m_collider2D);
+        GeneralUtils.SetUpComponent<RangeAttack>(transform, ref m_rangeAttack);
     }
 
     protected override void Start()
@@ -27,6 +27,8 @@ public class BuildingUnit : Unit
     private void Update()
     {
         UpdatePlacementProcess();
+
+        if (hasTarget) DoAttack();
     }
 
     private void UpdatePlacementProcess()
@@ -114,13 +116,6 @@ public class BuildingUnit : Unit
         UpdateCollider(new Vector2(m_collider2D.size.x, m_collider2D.size.y * 2));
     }
 
-    protected override void HandleOnScanned(Unit unit)
-    {
-        base.HandleOnScanned(unit);
-
-        if (hasTarget) DoAttack();
-    }
-
     protected override void HandleOnDead()
     {
         base.HandleOnDead();
@@ -146,9 +141,11 @@ public class BuildingUnit : Unit
 
     private void DoAttack()
     {
-        Projectile projectileClone = Instantiate(m_buildingSO.ProjectilePrefab, GeneralUtils.GetTopPosition(this.transform) + Vector3.up * 1.5f, Quaternion.identity);
+        bool isUnderAttacking = m_rangeAttack.TryToAttack(target);
 
-        projectileClone.Initialize(this, target, m_attackDamage);
+        EUnitState unitState = isUnderAttacking ? EUnitState.ATTACKING : EUnitState.IDLE;
+
+        m_stateSystem.SetValue(unitState);
     }
 
     public override bool TryInteractWithOtherUnit(Unit unit)

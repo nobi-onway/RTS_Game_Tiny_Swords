@@ -1,16 +1,14 @@
-using UnityEngine;
-
 public class EnemyUnit : HumanoidUnit
 {
     public override EUnitClass Class => EUnitClass.ENEMY;
-    private MeleeAttack m_meleeAttack;
+    private Attack m_meleeAttack;
     private BehaviorNode root;
 
     protected override void Awake()
     {
         base.Awake();
 
-        GeneralUtils.SetUpComponent<MeleeAttack>(this.transform, ref m_meleeAttack);
+        GeneralUtils.SetUpComponent<Attack>(this.transform, ref m_meleeAttack);
     }
 
     protected override void OnEnable()

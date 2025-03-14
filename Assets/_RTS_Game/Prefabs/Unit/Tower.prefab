@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -1292216070053026723}
   - component: {fileID: 7263403559304584814}
   - component: {fileID: 5345223578845623207}
+  - component: {fileID: 5309198609891519297}
   m_Layer: 0
   m_Name: Tower
   m_TagString: Untagged
@@ -52,7 +53,6 @@ MonoBehaviour:
   target: {fileID: 0}
   m_stateSystem:
     m_value: 0
-  m_attackDamage: 2
 --- !u!70 &5955148423829012929
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -138,3 +138,19 @@ MonoBehaviour:
   m_objectDetectionRadius: 5
   m_unitDetectionCheckRate: 1.5
   Enabled: 1
+--- !u!114 &5309198609891519297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3633860544362329909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3f1f467b05ccc04db6be6eb07f0d640, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_damage: 5
+  m_attackRange: 4.8
+  m_attackCoolDownTime: 1
+  m_projectilePrefab: {fileID: -4054903785003771611, guid: 052d68e8aaa223c48ab57441b4f65b25, type: 3}
