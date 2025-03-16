@@ -9,7 +9,17 @@ public abstract class Attack : MonoBehaviour, IActionNode
     protected Animator m_animator;
     protected SpriteRenderer m_spriteRenderer;
 
-    public abstract EStatusNode Execute(Blackboard blackboard, Action onSuccess = null);
+    public EStatusNode Execute(Blackboard blackboard, Action onSuccess = null)
+    {
+        Unit target = blackboard.Get<Unit>(Blackboard.CLASS_TARGET);
+
+        bool isInAtkRange = IsInAttackRange(target);
+
+        if (!isInAtkRange) return EStatusNode.FAILURE;
+
+        onSuccess();
+        return EStatusNode.SUCCESS;
+    }
 
     protected void Start()
     {

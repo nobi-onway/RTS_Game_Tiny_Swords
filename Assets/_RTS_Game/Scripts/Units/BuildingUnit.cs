@@ -19,6 +19,20 @@ public class BuildingUnit : Unit
         GeneralUtils.SetUpComponent<RangeAttack>(transform, ref m_rangeAttack);
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        m_rangeAttack.CalculateFirePosition += HandleCalculateFirePosition;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        m_rangeAttack.CalculateFirePosition -= HandleCalculateFirePosition;
+    }
+
     protected override void Start()
     {
         m_unitRadar.Enabled = false;
@@ -29,6 +43,11 @@ public class BuildingUnit : Unit
         UpdatePlacementProcess();
 
         if (hasTarget) DoAttack();
+    }
+
+    private Vector3 HandleCalculateFirePosition()
+    {
+        return GeneralUtils.GetTopPosition(this.transform) + Vector3.up * 1.5f;
     }
 
     private void UpdatePlacementProcess()

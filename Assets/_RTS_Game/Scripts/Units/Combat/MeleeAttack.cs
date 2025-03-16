@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class MeleeAttack : Attack
 {
@@ -42,17 +41,5 @@ public class MeleeAttack : Attack
         {
             m_animator.SetTrigger(atkDirection.y < 0 ? AnimatorParameter.DOWN_ATK_TRIG : AnimatorParameter.UP_ATK_TRIG);
         }
-    }
-
-    public override EStatusNode Execute(Blackboard blackboard, Action onSuccess)
-    {
-        Unit target = blackboard.Get<Unit>(Blackboard.CLASS_TARGET);
-
-        bool isInAtkRange = IsInAttackRange(target);
-
-        if (!isInAtkRange) return EStatusNode.FAILURE;
-
-        onSuccess();
-        return EStatusNode.SUCCESS;
     }
 }

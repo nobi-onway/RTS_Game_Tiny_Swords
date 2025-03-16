@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
         this.m_damage = damage;
     }
 
-    private void Update()
+    protected void Update()
     {
         if (m_target == null || m_target.CurrentState == EUnitState.DEAD)
         {
@@ -24,16 +24,22 @@ public class Projectile : MonoBehaviour
         }
 
         UpdatePosition();
+        UpdateRotation();
     }
 
     private void UpdatePosition()
     {
         Vector3 direction = (m_target.transform.position - this.transform.position).normalized;
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         this.transform.position += direction * m_speed * Time.deltaTime;
+    }
+
+    protected virtual void UpdateRotation()
+    {
+        Vector3 direction = (m_target.transform.position - this.transform.position).normalized;
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        this.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
 
     private void OnTriggerEnter2D(Collider2D other)

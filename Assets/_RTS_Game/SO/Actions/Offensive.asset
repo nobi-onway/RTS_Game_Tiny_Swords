@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Icon: {fileID: 7183686000987961966, guid: d3f5c0936d7f36d439ad289c675bfa5f, type: 3}
   ActionName: Offensive
-  Guid: a5bf27a3-6624-4c82-863d-f17d03751914
   ActionCardPrefab: {fileID: 5929403556674772170, guid: f4a8c234458c1404f9e73fc3bc32a345, type: 3}
-  m_warriorStance: 1
+  m_combatStance: 1

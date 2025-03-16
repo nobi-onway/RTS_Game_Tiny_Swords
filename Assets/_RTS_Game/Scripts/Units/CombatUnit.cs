@@ -30,7 +30,7 @@ public class CombatUnit : HumanoidUnit
 
         if (m_selectableUnit.GetCurrentActionSO() is StanceActionSO stanceActionSO)
         {
-            m_stanceSystem.SetValue(stanceActionSO.WarriorStance);
+            m_stanceSystem.SetValue(stanceActionSO.CombatStance);
         }
 
         Debug.Log(this.gameObject.name + " Start");

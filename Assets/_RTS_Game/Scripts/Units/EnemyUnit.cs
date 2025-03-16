@@ -1,14 +1,14 @@
 public class EnemyUnit : HumanoidUnit
 {
     public override EUnitClass Class => EUnitClass.ENEMY;
-    private Attack m_meleeAttack;
+    private Attack m_attack;
     private BehaviorNode root;
 
     protected override void Awake()
     {
         base.Awake();
 
-        GeneralUtils.SetUpComponent<Attack>(this.transform, ref m_meleeAttack);
+        GeneralUtils.SetUpComponent<Attack>(this.transform, ref m_attack);
     }
 
     protected override void OnEnable()
@@ -30,7 +30,7 @@ public class EnemyUnit : HumanoidUnit
         root = new SequenceNode(
             new ActionNode(m_unitRadar, blackboard),
             new SelectorNode(
-                new ActionNode(m_meleeAttack, blackboard, DoAttack),
+                new ActionNode(m_attack, blackboard, DoAttack),
                 new ActionNode(m_mover, blackboard)
             )
         );
@@ -40,7 +40,7 @@ public class EnemyUnit : HumanoidUnit
     {
         m_mover.StopMove();
 
-        bool isUnderAttacking = m_meleeAttack.TryToAttack(target);
+        bool isUnderAttacking = m_attack.TryToAttack(target);
 
         if (isUnderAttacking)
         {
