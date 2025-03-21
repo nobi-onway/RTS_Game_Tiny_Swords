@@ -20,4 +20,11 @@ public static class GeneralUtils
 
         return transform.position + Vector3.up * (collider2D.bounds.size.y / 2);
     }
+
+    public static Vector3 GetBottomPosition(Transform transform)
+    {
+        if (!transform.TryGetComponent(out Collider2D collider2D)) return transform.position;
+
+        return collider2D.bounds.min;
+    }
 }

@@ -21,6 +21,8 @@ public abstract class Unit : MonoBehaviour
 
     protected UnitRadar m_unitRadar;
 
+    public virtual bool Enable => true;
+
 
     protected virtual void Awake()
     {
@@ -84,6 +86,11 @@ public abstract class Unit : MonoBehaviour
         m_unitRadar.Enabled = false;
         SetTarget(null);
 
+        UnregisterUnit();
+    }
+
+    protected virtual void UnregisterUnit()
+    {
         GameManager.Instance.UnregisterUnit(this);
     }
 

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class GameManager : SingletonManager<GameManager>
@@ -8,9 +10,12 @@ public class GameManager : SingletonManager<GameManager>
     private BuildingUnit m_activeBuildingUnit;
     private List<Unit> m_playerUnits = new();
     private List<Unit> m_enemyUnits = new();
+    private List<StructureUnit> m_structureUnits = new();
 
     private Dictionary<EUnitClass, List<Unit>> UnitListLookUp;
 
+    [SerializeField] private Transform m_treeContainer;
+    private Tree[] m_trees = new Tree[0];
     public Unit ActiveUnit => m_activeUnit;
 
     protected override void Awake()
@@ -44,15 +49,16 @@ public class GameManager : SingletonManager<GameManager>
 
         m_activeUnit.DoActionAt(position);
     }
-    public Unit FindClosestUnit(Vector3 originalPosition, float maxDistance, EUnitClass unitClass)
-    {
-        List<Unit> units = UnitListLookUp[unitClass];
 
+    private Unit FindClosestUnit(List<Unit> units, Vector3 originalPosition, float maxDistance)
+    {
         Unit closestUnit = null;
         float closestDistance = float.MaxValue;
 
         foreach (Unit unit in units)
         {
+            if (!unit.Enable) continue;
+
             float distance = Vector3.Distance(originalPosition, unit.transform.position);
             if (distance <= maxDistance && distance < closestDistance)
             {
@@ -63,6 +69,50 @@ public class GameManager : SingletonManager<GameManager>
 
         return closestUnit;
     }
+
+    public Unit FindClosestUnit(Vector3 originalPosition, float maxDistance, EUnitClass unitClass)
+    {
+        List<Unit> units = UnitListLookUp[unitClass];
+
+        return FindClosestUnit(units, originalPosition, maxDistance);
+    }
+    public StructureUnit FindClosestStructureUnit(Vector3 originalPosition, float maxDistance)
+    {
+        List<Unit> units = m_structureUnits.Cast<Unit>().ToList();
+
+        return FindClosestUnit(units, originalPosition, maxDistance) as StructureUnit;
+    }
+
+    public Tree FindClosestUnClaimedTree(Vector3 originalPosition)
+    {
+        Tree closestTree = null;
+        float closestDistance = float.MaxValue;
+
+        if (m_trees.Length == 0)
+        {
+            m_trees = new Tree[m_treeContainer.childCount];
+
+            for (int i = 0; i < m_treeContainer.childCount; i++)
+            {
+                m_trees[i] = m_treeContainer.GetChild(i).GetComponent<Tree>();
+            }
+        }
+
+        foreach (Tree tree in m_trees)
+        {
+            if (tree.IsExploited) continue;
+
+            float distance = Vector3.Distance(originalPosition, tree.transform.position);
+            if (distance < closestDistance)
+            {
+                closestTree = tree;
+                closestDistance = distance;
+            }
+        }
+
+        return closestTree;
+    }
+
     public void SelectUnit(Unit unit)
     {
         if (unit == m_activeUnit)
@@ -76,6 +126,13 @@ public class GameManager : SingletonManager<GameManager>
             SelectNewUnit(unit);
         }
     }
+    public void SendWorkerToChop(Tree tree)
+    {
+        if (!m_hasActiveUnit) return;
+        if (m_activeUnit is not WorkerUnit workerUnit) return;
+
+        tree.StartExploitBy(workerUnit);
+    }
     public void RegisterUnit(Unit unit)
     {
         UnitListLookUp[unit.Class].Add(unit);
@@ -83,6 +140,17 @@ public class GameManager : SingletonManager<GameManager>
     public void UnregisterUnit(Unit unit)
     {
         UnitListLookUp[unit.Class].Remove(unit);
+
+        if (unit == m_activeUnit) CancelActiveUnit();
+    }
+    public void RegisterUnit(StructureUnit unit)
+    {
+        m_structureUnits.Add(unit);
+    }
+
+    public void UnregisterUnit(StructureUnit unit)
+    {
+        m_structureUnits.Remove(unit);
 
         if (unit == m_activeUnit) CancelActiveUnit();
     }

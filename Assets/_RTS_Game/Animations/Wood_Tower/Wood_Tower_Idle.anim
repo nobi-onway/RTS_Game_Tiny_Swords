@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Builder_Chop
+  m_Name: Wood_Tower_Idle
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,17 +21,13 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -5537870070541023844, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
+      value: {fileID: 1355195777722144874, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
     - time: 0.1
-      value: {fileID: 7042123909930582926, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
+      value: {fileID: 8449136028634530401, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
     - time: 0.2
-      value: {fileID: -5431640271881036569, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
+      value: {fileID: -4340742807042858613, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
     - time: 0.3
-      value: {fileID: -3948862315358351415, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
-    - time: 0.4
-      value: {fileID: -8928817820482097097, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
-    - time: 0.5
-      value: {fileID: 1911732741585851992, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
+      value: {fileID: -3945947257045179373, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -54,18 +50,16 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -5537870070541023844, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
-    - {fileID: 7042123909930582926, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
-    - {fileID: -5431640271881036569, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
-    - {fileID: -3948862315358351415, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
-    - {fileID: -8928817820482097097, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
-    - {fileID: 1911732741585851992, guid: 6c5ab8a303db348e0ae6d8f94be005bb, type: 3}
+    - {fileID: 1355195777722144874, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
+    - {fileID: 8449136028634530401, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
+    - {fileID: -4340742807042858613, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
+    - {fileID: -3945947257045179373, guid: 157a8e81e624e481d93483bd694add8b, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.6
+    m_StopTime: 0.4
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -84,11 +78,4 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0.3
-    functionName: HitTargetTree
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []

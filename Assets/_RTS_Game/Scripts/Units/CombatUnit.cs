@@ -36,20 +36,6 @@ public class CombatUnit : HumanoidUnit
         Debug.Log(this.gameObject.name + " Start");
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-
-        m_mover.OnDestinationReached += HandleOnDestinationReached;
-    }
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-
-        m_mover.OnDestinationReached -= HandleOnDestinationReached;
-    }
-
     protected override void UpdateBehavior()
     {
         base.UpdateBehavior();
@@ -69,7 +55,7 @@ public class CombatUnit : HumanoidUnit
     {
         bool isInAttackRange = m_attack.IsInAttackRange(target);
 
-        if (!isInAttackRange) { m_mover.MoveTo(target.transform.position); return; }
+        if (!isInAttackRange) { m_mover.MoveTo(target.transform.position, HandleOnDestinationReached); return; }
 
         m_mover.StopMove();
 

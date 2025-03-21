@@ -13,23 +13,10 @@ public class Mover : MonoBehaviour, IActionNode
     private float m_smoothFactor = 50;
     private bool m_isMoving;
 
-    public event Action<bool> OnMove;
-    public UnityAction OnDestinationReached;
-
     private void Awake()
     {
         GeneralUtils.SetUpComponent<AIPawn>(this.transform, ref m_AIPawn);
         GeneralUtils.SetUpComponent<Animator>(this.transform, ref m_animator);
-    }
-
-    private void OnEnable()
-    {
-        m_AIPawn.OnDestinationReached += OnDestinationReached;
-    }
-
-    private void OnDisable()
-    {
-        m_AIPawn.OnDestinationReached -= OnDestinationReached;
     }
 
     private void Start()
@@ -42,14 +29,14 @@ public class Mover : MonoBehaviour, IActionNode
         UpdateVelocity(this.transform.position);
     }
 
-    public void MoveTo(Vector3 position)
+    public void MoveTo(Vector3 position, UnityAction onArrived)
     {
-        m_AIPawn.SetDestination(position);
+        m_AIPawn.SetDestination(position, onArrived);
     }
 
     public void StopMove()
     {
-        m_AIPawn.SetDestination(null);
+        m_AIPawn.SetDestination(null, null);
     }
 
     private void UpdateVelocity(Vector3 currentPosition)
@@ -64,15 +51,13 @@ public class Mover : MonoBehaviour, IActionNode
 
         m_isMoving = m_smoothSpeed > 0;
 
-        OnMove?.Invoke(m_isMoving);
-
         m_animator.SetFloat(AnimatorParameter.SPEED_F, Mathf.Clamp01(m_smoothSpeed));
     }
 
     public EStatusNode Execute(Blackboard blackboard, Action onSuccess)
     {
         Unit target = blackboard.Get<Unit>(Blackboard.CLASS_TARGET);
-        MoveTo(target.transform.position);
+        MoveTo(target.transform.position, null);
 
         return m_isMoving ? EStatusNode.RUNNING : EStatusNode.SUCCESS;
     }

@@ -35,11 +35,11 @@ public class MeleeAttack : Attack
 
         if (Mathf.Abs(atkDirection.x) > Mathf.Abs(atkDirection.y))
         {
-            m_animator.SetTrigger(AnimatorParameter.HORIZONTAL_ATK_TRIG);
+            m_animator.SetTrigger(EAttackTrig.HORIZONTAL_ATK_TRIG.ToString());
         }
         else
         {
-            m_animator.SetTrigger(atkDirection.y < 0 ? AnimatorParameter.DOWN_ATK_TRIG : AnimatorParameter.UP_ATK_TRIG);
+            m_animator.SetTrigger(atkDirection.y < 0 ? EAttackTrig.DOWN_ATK_TRIG.ToString() : EAttackTrig.UP_ATK_TRIG.ToString());
         }
     }
 }

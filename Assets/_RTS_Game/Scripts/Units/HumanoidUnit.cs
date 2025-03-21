@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HumanoidUnit : Unit
 {
@@ -14,15 +15,11 @@ public class HumanoidUnit : Unit
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        m_mover.OnMove += ToMoveStateIf;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-
-        m_mover.OnMove -= ToMoveStateIf;
     }
 
     private void FixedUpdate()
@@ -30,17 +27,15 @@ public class HumanoidUnit : Unit
         UpdateBehavior();
     }
 
-    protected void MoveTo(Vector3 position)
+    protected void MoveTo(Vector3 position, UnityAction onArrived)
     {
-        m_mover.MoveTo(position);
+        m_mover.MoveTo(position, () => { m_stateSystem.SetValue(EUnitState.IDLE); onArrived?.Invoke(); });
         m_stateSystem.SetValue(EUnitState.MOVING);
     }
 
     protected override void HandleOnSetTarget(Unit target)
     {
         base.HandleOnSetTarget(target);
-
-        // if (target == null) m_mover.StopMove();
     }
 
     protected override void HandleOnDead()
@@ -56,14 +51,9 @@ public class HumanoidUnit : Unit
 
         ResetAction();
 
-        MoveTo(position);
+        MoveTo(position, null);
         UIManager.Instance.DisplayClickEffect(position);
     }
     protected virtual void ResetAction() { }
     protected virtual void UpdateBehavior() { }
-    private void ToMoveStateIf(bool isMoving)
-    {
-        if (!isMoving) m_stateSystem.SetValue(EUnitState.MOVING, EUnitState.IDLE);
-        if (isMoving) m_stateSystem.SetValue(EUnitState.MOVING);
-    }
 }

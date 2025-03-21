@@ -94,9 +94,13 @@ public class InputManager : SingletonManager<InputManager>
         Vector2 worldPosition = Camera.main.ScreenToWorldPoint(inputPosition);
         RaycastHit2D hit = Physics2D.Raycast(worldPosition, Vector2.zero);
 
-        if (HasClickOnUnit(hit, out Unit clickedUnit))
+        if (HasClickOn(hit, out Unit clickedUnit))
         {
             HandleClickOnUnit(clickedUnit);
+        }
+        else if (HasClickOn(hit, out Tree tree))
+        {
+            HandleClickOnTree(tree);
         }
         else
         {
@@ -111,16 +115,21 @@ public class InputManager : SingletonManager<InputManager>
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-    private bool HasClickOnUnit(RaycastHit2D hit, out Unit unit)
+    private bool HasClickOn<T>(RaycastHit2D hit, out T unit)
     {
-        if (hit.collider != null && hit.collider.TryGetComponent(out Unit clickedUnit))
+        if (hit.collider != null && hit.collider.TryGetComponent(out T clickedUnit))
         {
             unit = clickedUnit;
             return true;
         }
 
-        unit = null;
+        unit = default(T);
         return false;
+    }
+
+    private void HandleClickOnTree(Tree tree)
+    {
+        GameManager.Instance.SendWorkerToChop(tree);
     }
 
     private void HandleClickOnUnit(Unit unit)

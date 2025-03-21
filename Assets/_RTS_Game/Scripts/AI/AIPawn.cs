@@ -11,7 +11,7 @@ public class AIPawn : MonoBehaviour
     private List<Vector3> m_currentPath = new();
     private int m_currentNodeIndex;
     private SpriteRenderer m_spriteRenderer;
-    public UnityAction OnDestinationReached;
+    private UnityAction OnArrived;
 
     private Unit m_unit;
 
@@ -51,7 +51,7 @@ public class AIPawn : MonoBehaviour
             if (m_currentNodeIndex == m_currentPath.Count - 1)
             {
                 m_currentPath = null;
-                OnDestinationReached?.Invoke();
+                OnArrived?.Invoke();
             }
             else
             {
@@ -60,7 +60,7 @@ public class AIPawn : MonoBehaviour
         }
     }
 
-    public void SetDestination(Vector3? destination)
+    public void SetDestination(Vector3? destination, UnityAction onArrived)
     {
         if (!destination.HasValue)
         {
@@ -70,6 +70,7 @@ public class AIPawn : MonoBehaviour
         }
 
         PathFinding pathFinding = TilemapManager.Instance.PathFinding;
+        OnArrived = onArrived;
 
         if (m_currentPath != null && m_currentPath.Count > 0)
         {
