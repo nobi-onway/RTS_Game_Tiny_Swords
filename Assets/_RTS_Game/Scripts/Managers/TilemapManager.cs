@@ -6,6 +6,7 @@ public class TilemapManager : MonoSingletonManager<TilemapManager>
     [SerializeField] private Tilemap m_walkableTilemap;
     [SerializeField] private Tilemap m_overlayTilemap;
     [SerializeField] private Tilemap[] m_unreachableTilemaps;
+    [SerializeField] private Tilemap m_unBuildableTilemap;
     private Color m_highlightColor = new Color(0, 0.8f, 1, 0.4f);
     private Color m_blockColor = new Color(1f, 0.2f, 0, 0.8f);
     private Sprite m_placeholderTileSprite;
@@ -28,6 +29,11 @@ public class TilemapManager : MonoSingletonManager<TilemapManager>
     public bool IsInWalkable(Vector3Int tilePosition)
     {
         return m_walkableTilemap.HasTile(tilePosition);
+    }
+
+    private bool IsInUnBuildable(Vector3Int tilePosition)
+    {
+        return m_unBuildableTilemap.HasTile(tilePosition);
     }
 
     public bool IsInUnreachableTileMap(Vector3Int tilePosition)
@@ -98,5 +104,6 @@ public class TilemapManager : MonoSingletonManager<TilemapManager>
                                                           && !IsBlockByUnitType<BuildingUnit>(tilePosition);
     public bool CanPlaceTile(Vector3Int tilePosition) => IsInWalkable(tilePosition)
                                                         && !IsBlockByUnitType<HumanoidUnit>(tilePosition)
-                                                        && !IsInUnreachableTileMap(tilePosition);
+                                                        && !IsInUnreachableTileMap(tilePosition)
+                                                        && !IsInUnBuildable(tilePosition);
 }
