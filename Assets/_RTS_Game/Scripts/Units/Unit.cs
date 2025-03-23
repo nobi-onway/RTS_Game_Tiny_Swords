@@ -115,4 +115,16 @@ public abstract class Unit : MonoBehaviour
         return CanPerformAction();
     }
     public virtual void DoActionAt(Vector2 position) { }
+
+    public void Hide()
+    {
+        spriteRenderer.enabled = false;
+        Collider.enabled = false;
+    }
+
+    public void Show()
+    {
+        spriteRenderer.enabled = true;
+        Collider.enabled = true;
+    }
 }

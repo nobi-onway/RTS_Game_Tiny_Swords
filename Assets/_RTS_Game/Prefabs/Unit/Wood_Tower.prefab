@@ -130,7 +130,7 @@ MonoBehaviour:
   m_stateSystem:
     m_value: 0
   m_canStoreWood: 1
-  m_canStoreGold: 1
+  m_canStoreGold: 0
 --- !u!70 &4754275198615327902
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

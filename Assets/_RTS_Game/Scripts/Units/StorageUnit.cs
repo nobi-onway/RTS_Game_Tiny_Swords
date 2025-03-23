@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class StructureUnit : Unit
+public class StorageUnit : Unit
 {
     [SerializeField] private bool m_canStoreWood = false;
     [SerializeField] private bool m_canStoreGold = false;
@@ -8,7 +8,7 @@ public class StructureUnit : Unit
     public bool CanStoreWood => m_canStoreWood;
     public bool CanStoreGold => m_canStoreGold;
 
-    public override bool Enable => CanStoreWood;
+    public override bool Enable => CanStoreWood || CanStoreGold;
 
     protected override void OnEnable()
     {
@@ -36,8 +36,8 @@ public class StructureUnit : Unit
 
     private void HandleOnAddResource(int gold, int wood)
     {
-        if (wood > 0) UIManager.Instance.ShowTextPopup(GeneralUtils.GetTopPosition(this.transform), wood.ToString(), new Color(184, 133, 82));
-        if (gold > 0) UIManager.Instance.ShowTextPopup(GeneralUtils.GetTopPosition(this.transform), gold.ToString(), Color.yellow);
+        if (CanStoreWood) UIManager.Instance.ShowTextPopup(GeneralUtils.GetTopPosition(this.transform), wood.ToString(), new Color(184, 133, 82));
+        if (CanStoreGold) UIManager.Instance.ShowTextPopup(GeneralUtils.GetTopPosition(this.transform), gold.ToString(), Color.yellow);
     }
 
     public override bool TryInteractWithOtherUnit(Unit unit)

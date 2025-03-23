@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Callbacks;
@@ -10,13 +11,17 @@ public class GameManager : MonoSingletonManager<GameManager>
     private BuildingUnit m_activeBuildingUnit;
     private List<Unit> m_playerUnits = new();
     private List<Unit> m_enemyUnits = new();
-    private List<StructureUnit> m_structureUnits = new();
+    private List<StorageUnit> m_structureUnits = new();
 
     private Dictionary<EUnitClass, List<Unit>> UnitListLookUp;
 
     [SerializeField] private Transform m_treeContainer;
+    [SerializeField] private GoldMine m_activeGoldMine;
     private Tree[] m_trees = new Tree[0];
     public Unit ActiveUnit => m_activeUnit;
+    public BuildingUnit BuildingUnit => m_activeBuildingUnit;
+
+    public GoldMine ActiveGoldMine => m_activeGoldMine;
 
     protected override void Awake()
     {
@@ -81,11 +86,11 @@ public class GameManager : MonoSingletonManager<GameManager>
 
         return FindClosestUnit(units, originalPosition, maxDistance);
     }
-    public StructureUnit FindClosestStructureUnit(Vector3 originalPosition, float maxDistance)
+    public StorageUnit FindClosestStorageUnit(Vector3 originalPosition, float maxDistance, Func<StorageUnit, bool> sortedCondition)
     {
-        List<Unit> units = m_structureUnits.Cast<Unit>().ToList();
+        List<Unit> units = m_structureUnits.Where(storage => sortedCondition(storage)).Cast<Unit>().ToList();
 
-        return FindClosestUnit(units, originalPosition, maxDistance) as StructureUnit;
+        return FindClosestUnit(units, originalPosition, maxDistance) as StorageUnit;
     }
 
     public Tree FindClosestUnClaimedTree(Vector3 originalPosition)
@@ -138,6 +143,13 @@ public class GameManager : MonoSingletonManager<GameManager>
 
         tree.StartExploitBy(workerUnit);
     }
+    public void SendWorkerToMine(GoldMine goldMine)
+    {
+        if (!m_hasActiveUnit) return;
+        if (m_activeUnit is not WorkerUnit workerUnit) return;
+
+        workerUnit.SendToMine(goldMine);
+    }
     public void RegisterUnit(Unit unit)
     {
         UnitListLookUp[unit.Class].Add(unit);
@@ -148,12 +160,12 @@ public class GameManager : MonoSingletonManager<GameManager>
 
         if (unit == m_activeUnit) CancelActiveUnit();
     }
-    public void RegisterUnit(StructureUnit unit)
+    public void RegisterUnit(StorageUnit unit)
     {
         m_structureUnits.Add(unit);
     }
 
-    public void UnregisterUnit(StructureUnit unit)
+    public void UnregisterUnit(StorageUnit unit)
     {
         m_structureUnits.Remove(unit);
 
@@ -176,7 +188,19 @@ public class GameManager : MonoSingletonManager<GameManager>
     private void CancelActiveUnit()
     {
         if (!m_hasActiveUnit) return;
-        if (!m_activeUnit.TryGetComponent(out SelectableUnit selectableUnit)) return;
+        DeselectUnit(m_activeUnit);
+    }
+
+    public void CancelActiveUnit(Unit unit)
+    {
+        if (unit != m_activeUnit) return;
+
+        DeselectUnit(unit);
+    }
+
+    private void DeselectUnit(Unit unit)
+    {
+        if (!unit.TryGetComponent(out SelectableUnit selectableUnit)) return;
 
         selectableUnit.Deselect();
         SetActiveUnit(null);

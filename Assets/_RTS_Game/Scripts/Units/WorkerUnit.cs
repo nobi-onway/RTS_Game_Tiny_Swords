@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class WorkerUnit : HumanoidUnit
 {
@@ -17,6 +18,7 @@ public class WorkerUnit : HumanoidUnit
 
     private BuildingUnit m_targetBuilding => target?.GetComponent<BuildingUnit>();
     private Tree m_targetTree;
+    private GoldMine m_targetGoldMine;
     [SerializeField]
     private EnumSystem<EWorkerTask> m_taskSystem = new();
 
@@ -48,11 +50,20 @@ public class WorkerUnit : HumanoidUnit
             case EWorkerTask.RETURN_CHOPPING:
                 HandleReturnChoppingTask();
                 break;
+            case EWorkerTask.RETURN_MINING:
+                HandleReturnMiningTask();
+                break;
             case EWorkerTask.CHOP:
                 HandleChopTask();
                 break;
-            case EWorkerTask.RETURN_RESOURCE:
-                HandleReturnResourceTask();
+            case EWorkerTask.MINE:
+                HandleMineTask();
+                break;
+            case EWorkerTask.RETURN_WOOD_RESOURCE:
+                HandleReturnWoodResourceTask();
+                break;
+            case EWorkerTask.RETURN_GOLD_RESOURCE:
+                HandleReturnGoldResourceTask();
                 break;
             case EWorkerTask.NONE:
                 break;
@@ -80,7 +91,7 @@ public class WorkerUnit : HumanoidUnit
 
         m_mover.StopMove();
 
-        m_stateSystem.SetValue(EUnitState.IDLE, EUnitState.BUILDING);
+        m_stateSystem.SetValue(EUnitState.BUILDING);
     }
 
     private void HandleBuildTask()
@@ -97,34 +108,49 @@ public class WorkerUnit : HumanoidUnit
 
     private void HandleChopTask()
     {
-        if (m_stateSystem.IsCurrentValue(EUnitState.CHOPPING))
+        if (!m_stateSystem.IsCurrentValue(EUnitState.CHOPPING)) return;
+
+        m_choppingTimer += Time.deltaTime;
+
+        if (m_choppingTimer >= m_woodGatherTickTime)
         {
-            m_choppingTimer += Time.deltaTime;
+            m_woodCollected += m_woodPerTick;
+            m_choppingTimer = 0;
+        }
 
-            if (m_choppingTimer >= m_woodGatherTickTime)
-            {
-                m_woodCollected += m_woodPerTick;
-                m_choppingTimer = 0;
-            }
+        if (m_woodCollected == m_woodCapacity)
+        {
+            ReleaseFromChop();
 
-            if (m_woodCollected == m_woodCapacity)
-            {
-                ReleaseFromChop();
-
-                m_taskSystem.SetValue(EWorkerTask.RETURN_RESOURCE);
-            }
-
-            return;
+            m_taskSystem.SetValue(EWorkerTask.RETURN_WOOD_RESOURCE);
         }
     }
 
-    private void HandleReturnResourceTask()
+    private void HandleMineTask()
     {
-        StructureUnit storage = GameManager.Instance.FindClosestStructureUnit(this.transform.position, float.MaxValue);
+        if (m_stateSystem.IsCurrentValue(EUnitState.MINING)) return;
+
+        if (m_targetGoldMine == null) return;
+
+        MoveTo(m_targetGoldMine.transform.position, StartMining);
+    }
+
+    private void HandleReturnWoodResourceTask()
+    {
+        StorageUnit storage = GameManager.Instance.FindClosestStorageUnit(this.transform.position, float.MaxValue, (storageUnit) => storageUnit.CanStoreWood);
 
         if (storage == null) return;
 
-        ReturnToResourceStorage(storage);
+        ReturnToResourceStorage(storage, EWorkerTask.RETURN_CHOPPING);
+    }
+
+    private void HandleReturnGoldResourceTask()
+    {
+        StorageUnit storage = GameManager.Instance.FindClosestStorageUnit(this.transform.position, float.MaxValue, (storageUnit) => storageUnit.CanStoreGold);
+
+        if (storage == null) return;
+
+        ReturnToResourceStorage(storage, EWorkerTask.RETURN_MINING);
     }
 
     private void HandleReturnChoppingTask()
@@ -136,6 +162,11 @@ public class WorkerUnit : HumanoidUnit
         closestTree.StartExploitBy(this);
     }
 
+    private void HandleReturnMiningTask()
+    {
+        SendToMine(GameManager.Instance.ActiveGoldMine);
+    }
+
     private void HandleResourceDisplay()
     {
         m_holdingGoldSprite.gameObject.SetActive(IsHoldingGold);
@@ -144,20 +175,19 @@ public class WorkerUnit : HumanoidUnit
         animator.SetFloat(AnimatorParameter.HOLD_RESOURCE_F, IsHoldingResource ? 1 : 0);
     }
 
-    private void ReturnToResourceStorage(StructureUnit storageUnit)
+    private void ReturnToResourceStorage(StorageUnit storageUnit, EWorkerTask nextTask)
     {
         Vector3 closestPointToStorage = storageUnit.Collider.ClosestPoint(this.transform.position);
 
-        MoveTo(closestPointToStorage, ReturningWood);
+        MoveTo(closestPointToStorage, () => { ReturningResource(); m_taskSystem.SetValue(nextTask); });
     }
 
-    private void ReturningWood()
+    private void ReturningResource()
     {
         PlayerResourceManager.Instance.AddResource(m_goldCollected, m_woodCollected);
 
         m_woodCollected = 0;
-
-        m_taskSystem.SetValue(EWorkerTask.RETURN_CHOPPING);
+        m_goldCollected = 0;
     }
 
     //ANIMATION EVENT
@@ -180,7 +210,37 @@ public class WorkerUnit : HumanoidUnit
     {
         m_mover.StopMove();
 
+        m_goldCollected = 0;
+
         m_stateSystem.SetValue(EUnitState.IDLE, EUnitState.CHOPPING);
+    }
+
+    private void StartMining()
+    {
+        m_mover.StopMove();
+
+        if (!m_targetGoldMine.TryToEnterMine(this)) return;
+
+        m_woodCollected = 0;
+
+        GameManager.Instance.CancelActiveUnit(this);
+
+        m_stateSystem.SetValue(EUnitState.IDLE, EUnitState.MINING);
+    }
+
+    public void EnterMine()
+    {
+        Hide();
+    }
+
+    public void OnLeaveMine()
+    {
+        Show();
+
+        m_goldCollected = m_goldCapacity;
+        m_stateSystem.SetValue(EUnitState.IDLE);
+
+        m_taskSystem.SetValue(EWorkerTask.RETURN_GOLD_RESOURCE);
     }
 
     protected override void HandleOnDead()
@@ -219,6 +279,16 @@ public class WorkerUnit : HumanoidUnit
         UIManager.Instance.DisplayInteractEffect(tree.transform.position, EInteractType.CHOP);
     }
 
+    public void SendToMine(GoldMine goldMine)
+    {
+        m_taskSystem.SetValue(EWorkerTask.MINE);
+        m_targetGoldMine = goldMine;
+
+        MoveTo(GeneralUtils.GetBottomPosition(goldMine.transform), StartMining);
+
+        UIManager.Instance.DisplayInteractEffect(goldMine.transform.position, EInteractType.BUILD);
+    }
+
     private void ReleaseFromChop()
     {
         m_targetTree?.Unexploited();
@@ -249,12 +319,13 @@ public class WorkerUnit : HumanoidUnit
 
     private bool TryToInteractWithResourceStorage(Unit unit)
     {
-        if (!IsHoldingWood) return false;
+        if (!IsHoldingResource) return false;
 
-        if (unit is not StructureUnit storageUnit) return false;
-        if (!storageUnit.CanStoreWood) return false;
+        if (unit is not StorageUnit storageUnit) return false;
+        if (storageUnit.CanStoreWood && !IsHoldingWood) return false;
+        if (storageUnit.CanStoreGold && !IsHoldingGold) return false;
 
-        ReturnToResourceStorage(storageUnit);
+        ReturnToResourceStorage(storageUnit, EWorkerTask.NONE);
 
         return true;
     }

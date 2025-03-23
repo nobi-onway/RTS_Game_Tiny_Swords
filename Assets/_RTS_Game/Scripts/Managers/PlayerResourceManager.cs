@@ -32,4 +32,19 @@ public class PlayerResourceManager
         OnResourceChange?.Invoke(m_gold, m_wood);
         OnAddResource?.Invoke(gold, wood);
     }
+
+    public void ReduceResource(int gold, int wood)
+    {
+        m_gold -= gold;
+        m_wood -= wood;
+
+        OnResourceChange?.Invoke(m_gold, m_wood);
+    }
+
+    public bool TryReduceResource(int gold, int wood)
+    {
+        if (m_gold < gold || m_wood < wood) return false;
+
+        return true;
+    }
 }

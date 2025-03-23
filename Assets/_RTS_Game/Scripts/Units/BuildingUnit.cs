@@ -9,8 +9,8 @@ public class BuildingUnit : Unit
     private BuildingProcess m_buildingProcess;
     public bool IsUnderConstruct => !m_buildingProcess.IsConstructCompleted;
     private CapsuleCollider2D m_collider2D;
-
     private RangeAttack m_rangeAttack;
+
     protected override void Awake()
     {
         base.Awake();
@@ -68,23 +68,27 @@ public class BuildingUnit : Unit
     {
         InputManager.Instance.IsLockPan = false;
 
-        if (m_placementProcess.TryPlaceBuilding())
-        {
-            m_buildingProcess = new BuildingProcess(
-                                                    this.transform,
-                                                    m_buildingSO.FoundationSprite,
-                                                    m_buildingSO.CompletionSprite,
-                                                    m_buildingSO.BuildingTime,
-                                                    m_buildingSO.BuildingEffectPrefab,
-                                                    ref spriteRenderer
-                                                );
-            m_buildingProcess.TryAddWorker(workerUnit, this);
+        bool isEnoughResource = PlayerResourceManager.Instance.TryReduceResource(m_buildingSO.GoldCost, m_buildingSO.WoodCost);
 
-            GameManager.Instance.RegisterUnit(this);
-            return true;
-        }
+        Debug.Log("Is Enough Resource: " + isEnoughResource);
 
-        return false;
+        if (!m_placementProcess.TryPlaceBuilding() || !isEnoughResource) return false;
+
+        PlayerResourceManager.Instance.ReduceResource(m_buildingSO.GoldCost, m_buildingSO.WoodCost);
+
+        m_buildingProcess = new BuildingProcess(
+                                                this.transform,
+                                                m_buildingSO.FoundationSprite,
+                                                m_buildingSO.CompletionSprite,
+                                                m_buildingSO.BuildingTime,
+                                                m_buildingSO.BuildingEffectPrefab,
+                                                ref spriteRenderer
+                                            );
+        m_buildingProcess.TryAddWorker(workerUnit, this);
+
+        GameManager.Instance.RegisterUnit(this);
+
+        return true;
     }
 
     private void UpdateCollider(Vector2 size)

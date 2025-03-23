@@ -102,6 +102,10 @@ public class InputManager : MonoSingletonManager<InputManager>
         {
             HandleClickOnTree(tree);
         }
+        else if (HasClickOn(hit, out GoldMine goldMine))
+        {
+            HandleClickOnGoldMine(goldMine);
+        }
         else
         {
             HandleClickOnGround(worldPosition);
@@ -130,6 +134,11 @@ public class InputManager : MonoSingletonManager<InputManager>
     private void HandleClickOnTree(Tree tree)
     {
         GameManager.Instance.SendWorkerToChop(tree);
+    }
+
+    private void HandleClickOnGoldMine(GoldMine goldMine)
+    {
+        GameManager.Instance.SendWorkerToMine(goldMine);
     }
 
     private void HandleClickOnUnit(Unit unit)
