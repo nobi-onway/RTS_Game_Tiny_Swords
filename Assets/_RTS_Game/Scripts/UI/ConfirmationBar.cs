@@ -1,21 +1,32 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class ConfirmationBar : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI m_goldValueTMP;
     [SerializeField] private TextMeshProUGUI m_woodValueTMP;
-
+    [SerializeField] private RectTransform m_confirmationButtons;
+    [SerializeField] private Button m_confirmButton;
+    [SerializeField] private Button m_cancelButton;
     private bool m_isShowing = false;
     private int m_reqGold, m_reqWood;
+    private UnityAction OnConfirm;
+    private UnityAction OnCancel;
 
     private void OnEnable()
     {
         PlayerResourceManager.Instance.OnResourceChange += HandlePlayerResourceChange;
+
+        m_confirmButton.onClick.AddListener(() => OnConfirm());
+        m_cancelButton.onClick.AddListener(() => OnCancel());
     }
 
     private void OnDisable()
     {
+        UnsubscribeAllAction();
+
         PlayerResourceManager.Instance.OnResourceChange -= HandlePlayerResourceChange;
     }
 
@@ -31,6 +42,23 @@ public class ConfirmationBar : MonoBehaviour
         this.gameObject.SetActive(true);
 
         HandlePlayerResourceChange(PlayerResourceManager.Instance.Gold, PlayerResourceManager.Instance.Wood);
+
+        m_confirmationButtons.gameObject.SetActive(OnConfirm != null && OnCancel != null);
+    }
+
+    public void SetUpHooks(UnityAction onConfirm, UnityAction onCancel)
+    {
+        this.OnConfirm = onConfirm;
+        this.OnCancel = onCancel;
+    }
+
+    private void UnsubscribeAllAction()
+    {
+        this.OnCancel = null;
+        this.OnConfirm = null;
+
+        m_confirmButton.onClick.RemoveAllListeners();
+        m_cancelButton.onClick.RemoveAllListeners();
     }
 
     public void Hide()

@@ -12,7 +12,7 @@ public class BuildActionSO : ActionSO
         base.Execute();
 
         GameManager.Instance.PlaceActiveBuildingUnit();
-        UIManager.Instance.HideBuildingConfirmationBar();
+        UIManager.Instance.HideConfirmationBar();
     }
 
     public override void PrepareExecute()
@@ -24,6 +24,6 @@ public class BuildActionSO : ActionSO
         );
 
         GameManager.Instance.SelectNewBuildingUnit(buildingUnit);
-        UIManager.Instance.ShowBuildingConfirmationBar(m_buildingSO);
+        UIManager.Instance.ShowConfirmationBar(m_buildingSO.GoldCost, m_buildingSO.WoodCost);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UIManager : MonoSingletonManager<UIManager>
 {
@@ -13,6 +14,7 @@ public class UIManager : MonoSingletonManager<UIManager>
     [SerializeField] private TextPopup m_textPopupPrefab;
     [SerializeField] private ActionBar m_actionBar;
     [SerializeField] private ConfirmationBar m_confirmationBar;
+
 
     public void DisplayClickEffect(Vector2 position)
     {
@@ -35,15 +37,17 @@ public class UIManager : MonoSingletonManager<UIManager>
 
     public void ShowActionBar(ActionSO[] actions, int curActionIdx)
     {
+        HideConfirmationBar();
         m_actionBar.Show(actions, curActionIdx);
     }
 
-    public void ShowBuildingConfirmationBar(BuildingSO buildingSO)
+    public void ShowConfirmationBar(int goldCost, int woodCost, UnityAction onConfirm = null, UnityAction onCancel = null)
     {
-        m_confirmationBar.Show(buildingSO.GoldCost, buildingSO.WoodCost);
+        m_confirmationBar.SetUpHooks(onConfirm, onCancel);
+        m_confirmationBar.Show(goldCost, woodCost);
     }
 
-    public void HideBuildingConfirmationBar()
+    public void HideConfirmationBar()
     {
         m_confirmationBar.Hide();
     }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40f70f30140595749a7252787aff51f5, type: 3}
+  m_Name: TrainWorker
+  m_EditorClassIdentifier: 
+  Icon: {fileID: 518637680476007102, guid: 1576826ad873b2a4684871dad76a6417, type: 3}
+  ActionName: Train Worker
+  ActionCardPrefab: {fileID: -4207950847215864489, guid: c652c8a48c2d9fc4388df1ead553b0b7, type: 3}
+  m_unitPrefab: {fileID: 281380777372237470, guid: 0aeef12b5dab45b44b5c6ee7578350e6, type: 3}
+  m_goldCost: 10
+  m_woodCost: 10
