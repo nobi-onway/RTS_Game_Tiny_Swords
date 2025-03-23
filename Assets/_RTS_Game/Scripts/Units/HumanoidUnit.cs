@@ -51,9 +51,11 @@ public class HumanoidUnit : Unit
 
         ResetAction();
 
-        MoveTo(position, null);
+        MoveTo(position, HandleDestinationReached);
         UIManager.Instance.DisplayClickEffect(position);
     }
+
+    protected virtual void HandleDestinationReached() { }
     protected virtual void ResetAction() { }
     protected virtual void UpdateBehavior() { }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UIManager : SingletonManager<UIManager>
+public class UIManager : MonoSingletonManager<UIManager>
 {
     [Header("UI")]
     [SerializeField] private PointToClick m_pointToClickPrefab;
@@ -48,7 +48,7 @@ public class UIManager : SingletonManager<UIManager>
         m_confirmationBar.Hide();
     }
 
-    public void SpawnTextPopup(Vector3 position, string text, Color color)
+    public void ShowTextPopup(Vector3 position, string text, Color color)
     {
         TextPopup textPopupClone = Instantiate(m_textPopupPrefab, position, Quaternion.identity);
 

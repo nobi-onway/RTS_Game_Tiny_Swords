@@ -39,11 +39,7 @@ public abstract class Attack : MonoBehaviour, IActionNode
         bool isInCoolDownTime = m_currentCoolDownTime < m_attackCoolDownTime;
         if (isInCoolDownTime) return false;
 
-        bool isTargetDead = unit.CurrentState == EUnitState.DEAD;
-        if (isTargetDead) return false;
-
-        bool hasHealth = unit.TryGetComponent(out healthController);
-        if (!hasHealth) return false;
+        if (!CanDamageUnit(unit, out healthController)) return false;
 
         PerformAttackAnimation(unit.transform.position);
 
@@ -57,6 +53,19 @@ public abstract class Attack : MonoBehaviour, IActionNode
         Vector3 closestPoint = targetCollider.ClosestPoint(this.transform.position);
 
         return Vector2.Distance(closestPoint, this.transform.position) <= m_attackRange;
+    }
+
+    public bool CanDamageUnit(Unit target, out HealthController healthController)
+    {
+        healthController = null;
+
+        bool isTargetDead = target.CurrentState == EUnitState.DEAD;
+        if (isTargetDead) return false;
+
+        bool hasHealth = target.TryGetComponent(out healthController);
+        if (!hasHealth) return false;
+
+        return true;
     }
 
     public abstract bool TryToAttack(Unit unit);

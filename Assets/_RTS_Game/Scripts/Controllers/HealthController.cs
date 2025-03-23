@@ -50,7 +50,7 @@ public class HealthController : MonoBehaviour
 
         m_flashEffectCoroutine ??= StartCoroutine(IE_FlashEffect(m_flashDamageEffectDuration, m_flashCount, m_damageFlashColor));
 
-        UIManager.Instance.SpawnTextPopup(GeneralUtils.GetTopPosition(this.transform), damage.ToString(), Color.red);
+        UIManager.Instance.ShowTextPopup(GeneralUtils.GetTopPosition(this.transform), damage.ToString(), Color.red);
 
         if (CurrentHealth <= 0) Die();
     }

@@ -54,6 +54,8 @@ public class EnemyUnit : HumanoidUnit
 
     protected override void UpdateBehavior()
     {
+        if (m_stateSystem.IsCurrentValue(EUnitState.DEAD)) return;
+
         root?.Execute();
     }
 }

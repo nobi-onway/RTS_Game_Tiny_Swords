@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
-public class GameManager : SingletonManager<GameManager>
+public class GameManager : MonoSingletonManager<GameManager>
 {
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
@@ -26,6 +26,11 @@ public class GameManager : SingletonManager<GameManager>
             { EUnitClass.PLAYER, m_playerUnits },
             { EUnitClass.ENEMY, m_enemyUnits },
         };
+    }
+
+    private void Start()
+    {
+        PlayerResourceManager.Instance.AddResource(276, 126);
     }
 
     public void PlaceActiveBuildingUnit()
@@ -182,7 +187,7 @@ public class GameManager : SingletonManager<GameManager>
         m_activeUnit = unit;
     }
 
-    private bool IsRegisteredUnit(Unit unit) => UnitListLookUp[unit.Class].Contains(unit);
+    private bool IsRegisteredUnit(Unit unit) => UnitListLookUp[unit.Class].Contains(unit) || m_structureUnits.Contains(unit);
 
     void OnGUI()
     {

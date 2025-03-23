@@ -124,9 +124,7 @@ public class WorkerUnit : HumanoidUnit
 
         if (storage == null) return;
 
-        Vector3 closestPointToStorage = storage.Collider.ClosestPoint(this.transform.position);
-
-        MoveTo(closestPointToStorage, ReturningWood);
+        ReturnToResourceStorage(storage);
     }
 
     private void HandleReturnChoppingTask()
@@ -146,8 +144,17 @@ public class WorkerUnit : HumanoidUnit
         animator.SetFloat(AnimatorParameter.HOLD_RESOURCE_F, IsHoldingResource ? 1 : 0);
     }
 
+    private void ReturnToResourceStorage(StructureUnit storageUnit)
+    {
+        Vector3 closestPointToStorage = storageUnit.Collider.ClosestPoint(this.transform.position);
+
+        MoveTo(closestPointToStorage, ReturningWood);
+    }
+
     private void ReturningWood()
     {
+        PlayerResourceManager.Instance.AddResource(m_goldCollected, m_woodCollected);
+
         m_woodCollected = 0;
 
         m_taskSystem.SetValue(EWorkerTask.RETURN_CHOPPING);
@@ -225,11 +232,30 @@ public class WorkerUnit : HumanoidUnit
     {
         if (!base.TryInteractWithOtherUnit(unit)) return false;
 
+        bool canInteractWithUnit = TryToInteractWithBuilding(unit) || TryToInteractWithResourceStorage(unit);
+
+        return canInteractWithUnit;
+    }
+
+    private bool TryToInteractWithBuilding(Unit unit)
+    {
         if (unit is not BuildingUnit buildingUnit) return false;
         if (!buildingUnit.IsUnderConstruct) return false;
 
         buildingUnit.AssignWorkerUnit(this);
 
-        return false;
+        return true;
+    }
+
+    private bool TryToInteractWithResourceStorage(Unit unit)
+    {
+        if (!IsHoldingWood) return false;
+
+        if (unit is not StructureUnit storageUnit) return false;
+        if (!storageUnit.CanStoreWood) return false;
+
+        ReturnToResourceStorage(storageUnit);
+
+        return true;
     }
 }

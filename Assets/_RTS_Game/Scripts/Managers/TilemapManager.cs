@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TilemapManager : SingletonManager<TilemapManager>
+public class TilemapManager : MonoSingletonManager<TilemapManager>
 {
     [SerializeField] private Tilemap m_walkableTilemap;
     [SerializeField] private Tilemap m_overlayTilemap;

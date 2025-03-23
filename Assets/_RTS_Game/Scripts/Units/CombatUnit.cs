@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CombatUnit : HumanoidUnit
@@ -32,49 +33,56 @@ public class CombatUnit : HumanoidUnit
         {
             m_stanceSystem.SetValue(stanceActionSO.CombatStance);
         }
-
-        Debug.Log(this.gameObject.name + " Start");
     }
 
     protected override void UpdateBehavior()
     {
-        base.UpdateBehavior();
+        if (m_stateSystem.IsCurrentValue(EUnitState.DEAD)) return;
 
         if (m_taskSystem.IsCurrentValue(ECombatTask.FIGHT))
         {
-            DoAttack();
+            if (m_stanceSystem.IsCurrentValue(ECombatStance.OFFENSIVE)) DoChase();
+
+            if (m_stateSystem.IsCurrentValue(EUnitState.ATTACKING)) DoAttack();
+
+            m_stateSystem.SetValue(m_attack.IsInAttackRange(target) ? EUnitState.ATTACKING : EUnitState.IDLE);
         }
     }
 
-    protected void HandleOnDestinationReached()
+    protected override void HandleDestinationReached()
     {
         m_taskSystem.SetValue(ECombatTask.GUARD);
     }
 
     protected virtual void DoAttack()
     {
+        m_attack.TryToAttack(target);
+
+        bool canDamageUnit = m_attack.CanDamageUnit(target, out HealthController healthController);
+
+        if (!canDamageUnit) m_taskSystem.SetValue(ECombatTask.FIGHT, ECombatTask.GUARD);
+    }
+
+    private void DoChase()
+    {
         bool isInAttackRange = m_attack.IsInAttackRange(target);
 
-        if (!isInAttackRange) { m_mover.MoveTo(target.transform.position, HandleOnDestinationReached); return; }
+        if (!isInAttackRange) { m_mover.MoveTo(target.transform.position, null); return; }
 
         m_mover.StopMove();
-
-        bool isUnderAttacking = m_attack.TryToAttack(target);
-
-        EUnitState unitState = isUnderAttacking ? EUnitState.ATTACKING : EUnitState.IDLE;
-
-        m_stateSystem.SetValue(unitState);
     }
 
     protected override void HandleOnScanned(Unit unit)
     {
-        if (CurrentStance == ECombatStance.DEFENSIVE) return;
-
         if (CurrentTask != ECombatTask.GUARD) return;
 
         base.HandleOnScanned(unit);
 
-        if (hasTarget) m_taskSystem.SetValue(ECombatTask.GUARD, ECombatTask.FIGHT);
+        bool canFight = hasTarget
+                        && (CurrentStance == ECombatStance.OFFENSIVE
+                            || (CurrentStance == ECombatStance.DEFENSIVE && m_attack.IsInAttackRange(target)));
+
+        if (canFight) m_taskSystem.SetValue(ECombatTask.GUARD, ECombatTask.FIGHT);
     }
 
     protected override void ResetAction()

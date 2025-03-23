@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ResourceManager : SingletonManager<ResourceManager>
+public class ResourceManager : MonoSingletonManager<ResourceManager>
 {
     private Material m_originalMaterial;
     private Material m_highlightMaterial;
