@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219a0ca878d0a354a99e528087decdda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_unitClass: 1
+  m_unitClass: 01000000
   m_objectDetectionRadius: 5
   m_unitDetectionCheckRate: 1.5
   Enabled: 1
@@ -154,3 +154,4 @@ MonoBehaviour:
   m_attackRange: 4.8
   m_attackCoolDownTime: 1
   m_projectilePrefab: {fileID: -4054903785003771611, guid: 052d68e8aaa223c48ab57441b4f65b25, type: 3}
+  m_attackTrig: 000000000100000002000000030000000400000005000000

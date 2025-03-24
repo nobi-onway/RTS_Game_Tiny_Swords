@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UnitRadar : MonoBehaviour, IActionNode
 {
-    [SerializeField] private EUnitClass m_unitClass;
+    [SerializeField] private EUnitClass[] m_unitClass;
     [SerializeField] private float m_objectDetectionRadius;
     [SerializeField] private float m_unitDetectionCheckRate;
     private float m_nextUnitDetectionTime;
@@ -31,7 +31,19 @@ public class UnitRadar : MonoBehaviour, IActionNode
 
     private bool TryFindClosestFoe(out Unit foe)
     {
-        foe = GameManager.Instance.FindClosestUnit(this.transform.position, m_objectDetectionRadius, m_unitClass);
+        foe = null;
+
+        if (m_unitClass == null) return false;
+
+        foreach (EUnitClass unitClass in m_unitClass)
+        {
+            float detectRadius = unitClass == EUnitClass.KING ? float.MaxValue : m_objectDetectionRadius;
+
+            foe = GameManager.Instance.FindClosestUnit(this.transform.position, detectRadius, unitClass);
+
+            if (foe != null) break;
+        }
+
         return foe != null;
     }
 

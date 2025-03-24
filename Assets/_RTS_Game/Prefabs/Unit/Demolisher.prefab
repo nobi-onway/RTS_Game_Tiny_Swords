@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a3ee326c428c1e4db23ee46564a64b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 0
+  m_speed: 2
   m_currentPath: []
   m_separationRadius: 0
   m_separationForce: 0
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 219a0ca878d0a354a99e528087decdda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_unitClass: 0
+  m_unitClass: 0000000002000000
   m_objectDetectionRadius: 7
   m_unitDetectionCheckRate: 4
   Enabled: 1

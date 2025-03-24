@@ -11,6 +11,7 @@ public class GameManager : MonoSingletonManager<GameManager>
     private BuildingUnit m_activeBuildingUnit;
     private List<Unit> m_playerUnits = new();
     private List<Unit> m_enemyUnits = new();
+    private List<Unit> m_kingUnits = new();
     private List<StorageUnit> m_structureUnits = new();
 
     private Dictionary<EUnitClass, List<Unit>> UnitListLookUp;
@@ -20,8 +21,11 @@ public class GameManager : MonoSingletonManager<GameManager>
     private Tree[] m_trees = new Tree[0];
     public Unit ActiveUnit => m_activeUnit;
     public BuildingUnit BuildingUnit => m_activeBuildingUnit;
-
     public GoldMine ActiveGoldMine => m_activeGoldMine;
+
+
+    [Header("Spawner"), SerializeField]
+    private EnemySpawner m_enemySpawner;
 
     protected override void Awake()
     {
@@ -30,12 +34,14 @@ public class GameManager : MonoSingletonManager<GameManager>
         UnitListLookUp = new Dictionary<EUnitClass, List<Unit>>() {
             { EUnitClass.PLAYER, m_playerUnits },
             { EUnitClass.ENEMY, m_enemyUnits },
+            { EUnitClass.KING, m_kingUnits },
         };
     }
 
     private void Start()
     {
         PlayerResourceManager.Instance.AddResource(276, 126);
+        m_enemySpawner.StartUp();
     }
 
     public void PlaceActiveBuildingUnit()
