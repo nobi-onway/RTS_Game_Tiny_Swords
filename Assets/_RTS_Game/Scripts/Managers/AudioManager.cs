@@ -5,6 +5,7 @@ using UnityEngine;
 public class AudioManager : MonoSingletonManager<AudioManager>
 {
     [SerializeField] private AudioSource m_musicSource;
+    [SerializeField] private AudioSettingsSO m_uiButtonClickAudioSettings;
     [SerializeField] private int m_initialPoolSize = 10;
 
     private Queue<AudioSource> m_audioSourcePool;
@@ -16,6 +17,11 @@ public class AudioManager : MonoSingletonManager<AudioManager>
         DontDestroyOnLoad(this.gameObject);
 
         InitializeAudioPool();
+    }
+
+    public void PlayButtonClick()
+    {
+        PlaySound(m_uiButtonClickAudioSettings, Vector3.zero);
     }
 
     public void PlayerMusic(AudioSettingsSO audioSettings)

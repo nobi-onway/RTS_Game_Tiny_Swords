@@ -432,7 +432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_terminationAudioSettings: {fileID: 11400000, guid: 1082ef416a4f3c048b3c66f218078a67, type: 2}
-  m_maxHealth: 20
+  m_maxHealth: 1
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.27, b: 0.25, a: 1}
   m_flashDamageEffectDuration: 0.2

@@ -19,8 +19,8 @@ public class ConfirmationBar : MonoBehaviour
     {
         PlayerResourceManager.Instance.OnResourceChange += HandlePlayerResourceChange;
 
-        m_confirmButton.onClick.AddListener(() => OnConfirm());
-        m_cancelButton.onClick.AddListener(() => OnCancel());
+        m_confirmButton.onClick.AddListener(OnConfirm);
+        m_cancelButton.onClick.AddListener(OnCancel);
     }
 
     private void OnDisable()
@@ -48,8 +48,8 @@ public class ConfirmationBar : MonoBehaviour
 
     public void SetUpHooks(UnityAction onConfirm, UnityAction onCancel)
     {
-        this.OnConfirm = onConfirm;
-        this.OnCancel = onCancel;
+        this.OnConfirm = () => { AudioManager.Instance.PlayButtonClick(); onConfirm(); };
+        this.OnCancel = () => { AudioManager.Instance.PlayButtonClick(); onCancel(); };
     }
 
     private void UnsubscribeAllAction()

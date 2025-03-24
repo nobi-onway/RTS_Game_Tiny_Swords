@@ -42,7 +42,6 @@ public class EnemySpawner : MonoBehaviour
         switch (CurrentState)
         {
             case ESpawnState.FINISHED:
-                Debug.Log("Spawn Finished");
                 break;
             case ESpawnState.WAITING:
                 HandleWaiting();

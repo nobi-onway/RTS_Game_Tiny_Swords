@@ -109,8 +109,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_speed: 2
   m_currentPath: []
-  m_separationRadius: 0
-  m_separationForce: 0
+  m_separationRadius: 0.5
+  m_separationForce: 1
   m_enableSeparation: 1
 --- !u!95 &7521958609630154740
 Animator:

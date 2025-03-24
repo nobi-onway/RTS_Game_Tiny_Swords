@@ -1,0 +1,6 @@
+- attackRange không đồng bộ với animation
+- pathfinding  
+- offensive - defensive stance
+- explosion dynamite
+- health bar
+- brief description active unit

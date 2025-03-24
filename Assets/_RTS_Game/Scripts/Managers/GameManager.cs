@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingletonManager<GameManager>
 {
     [Header("Audio")]
     [SerializeField] private AudioSettingsSO m_backgroundAudioSettings;
+    [SerializeField] private AudioSettingsSO m_winAudioSettings;
+    [SerializeField] private AudioSettingsSO m_loseAudioSettings;
 
+    [Space, Header("UI")]
+    [SerializeField] private GameOverLayout m_gameOverLayout;
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
     private BuildingUnit m_activeBuildingUnit;
@@ -26,9 +31,15 @@ public class GameManager : MonoSingletonManager<GameManager>
     public BuildingUnit BuildingUnit => m_activeBuildingUnit;
     public GoldMine ActiveGoldMine => m_activeGoldMine;
 
+    private EnumSystem<EGameState> m_stateSystem = new();
+    public EGameState CurrentState => m_stateSystem.Value;
+
 
     [Header("Spawner"), SerializeField]
     private EnemySpawner m_enemySpawner;
+
+    private bool HasAnyEnemy => UnitListLookUp[EUnitClass.ENEMY].Count > 0;
+    private bool IsVictory => !HasAnyEnemy && m_enemySpawner.CurrentState == ESpawnState.FINISHED;
 
     protected override void Awake()
     {
@@ -41,12 +52,56 @@ public class GameManager : MonoSingletonManager<GameManager>
         };
     }
 
+    private void OnEnable()
+    {
+        m_stateSystem.OnValueChange += HandleOnStateChange;
+        m_gameOverLayout.OnRestartClicked += RestartGame;
+        m_gameOverLayout.OnQuitClicked += GoToMenu;
+    }
+
+    private void OnDisable()
+    {
+        m_stateSystem.OnValueChange -= HandleOnStateChange;
+        m_gameOverLayout.OnRestartClicked -= RestartGame;
+        m_gameOverLayout.OnQuitClicked -= GoToMenu;
+    }
+
     private void Start()
     {
         PlayerResourceManager.Instance.AddResource(276, 126);
         m_enemySpawner.StartUp();
 
         AudioManager.Instance.PlayerMusic(m_backgroundAudioSettings);
+
+        ChangeGameState(EGameState.PLAYING);
+    }
+
+    private void HandleOnStateChange(EGameState eGameState)
+    {
+        switch (eGameState)
+        {
+            case EGameState.PLAYING:
+                Time.timeScale = 1;
+                break;
+            case EGameState.PAUSE:
+                Time.timeScale = 0;
+                break;
+            case EGameState.VICTORY:
+                m_gameOverLayout.ShowGameOver(true);
+                AudioManager.Instance.PlayerMusic(m_winAudioSettings);
+                Time.timeScale = 0;
+                break;
+            case EGameState.GAME_OVER:
+                m_gameOverLayout.ShowGameOver(false);
+                AudioManager.Instance.PlayerMusic(m_loseAudioSettings);
+                Time.timeScale = 0;
+                break;
+        }
+    }
+
+    private void ChangeGameState(EGameState eGameState)
+    {
+        m_stateSystem.SetValue(eGameState);
     }
 
     public void PlaceActiveBuildingUnit()
@@ -170,6 +225,9 @@ public class GameManager : MonoSingletonManager<GameManager>
         UnitListLookUp[unit.Class].Remove(unit);
 
         if (unit == m_activeUnit) CancelActiveUnit();
+
+        if (IsVictory) ChangeGameState(EGameState.VICTORY);
+        if (unit.Class == EUnitClass.KING) ChangeGameState(EGameState.GAME_OVER);
     }
     public void RegisterUnit(StorageUnit unit)
     {
@@ -224,12 +282,13 @@ public class GameManager : MonoSingletonManager<GameManager>
 
     private bool IsRegisteredUnit(Unit unit) => UnitListLookUp[unit.Class].Contains(unit) || m_structureUnits.Contains(unit);
 
-    void OnGUI()
+    private void RestartGame()
     {
-        if (m_activeUnit)
-        {
-            GUI.Label(new Rect(20, 120, 200, 20), "State: " + m_activeUnit.CurrentState, new GUIStyle { fontSize = 30 });
-            // GUI.Label(new Rect(20, 160, 200, 20), "Task: " + m_activeUnit.CurrentTask, new GUIStyle { fontSize = 30 });
-        }
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void GoToMenu()
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 }

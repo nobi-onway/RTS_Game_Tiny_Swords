@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71a4096e9f1def74993b2161cf225f5d, type: 3}
-  m_Name: BackgroundAudioSettings
+  m_Name: MenuAudioSettings
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 8f92d0a063d959a4f89327c6567fb358, type: 3}
-  Volume: 0.6
+  - {fileID: 8300000, guid: 3a15411588a50704c8199b4c316dfc72, type: 3}
+  Volume: 0.8
   Pitch: 1
   Loop: 1
   SpatialBlend: 0

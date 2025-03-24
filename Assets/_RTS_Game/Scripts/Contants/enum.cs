@@ -8,3 +8,4 @@ public enum EInteractType { BUILD, FIGHT, CHOP }
 public enum EAttackTrig { HORIZONTAL_ATK_TRIG, UP_ATK_TRIG, DOWN_ATK_TRIG, UP_DIAGONAL_ATK_TRIG, DOWN_DIAGONAL_ATK_TRIG, ATK_TRIG }
 public enum ESpawnState { IDLE, SPAWNING, WAITING, FINISHED }
 public enum EAudioPriority { HIGH = 0, MEDIUM = 128, LOW = 256 }
+public enum EGameState { PLAYING, PAUSE, GAME_OVER, VICTORY }

@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71a4096e9f1def74993b2161cf225f5d, type: 3}
-  m_Name: BackgroundAudioSettings
+  m_Name: VictoryAudoSettings
   m_EditorClassIdentifier: 
   clips:
-  - {fileID: 8300000, guid: 8f92d0a063d959a4f89327c6567fb358, type: 3}
-  Volume: 0.6
+  - {fileID: 8300000, guid: c321b55494c4a2946ab7f79c2b1c64c4, type: 3}
+  - {fileID: 8300000, guid: e17c640fba85113409437bb845a4c2d9, type: 3}
+  Volume: 0.8
   Pitch: 1
-  Loop: 1
+  Loop: 0
   SpatialBlend: 0
   MinDistance: 1
   MaxDistance: 15

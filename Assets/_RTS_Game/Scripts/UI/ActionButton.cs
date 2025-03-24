@@ -19,6 +19,8 @@ public class ActionButton : ActionCard
 
     private void OnButtonPressed(ActionSO actionSO)
     {
+        AudioManager.Instance.PlayButtonClick();
+
         actionSO.Execute();
         OnFocus?.Invoke(actionSO);
     }
