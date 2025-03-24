@@ -183,3 +183,4 @@ MonoBehaviour:
   m_actionSOArray: []
   m_defaultActionSO: {fileID: 0}
   m_currentActionIdx: 0
+  m_interactAudioSettings: {fileID: 11400000, guid: 2d2d2eabefd82c8429585b36e4409778, type: 2}

@@ -9,6 +9,9 @@ public abstract class Attack : MonoBehaviour, IActionNode
     protected Animator m_animator;
     protected SpriteRenderer m_spriteRenderer;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSettingsSO m_attackAudioSettings;
+
     public EStatusNode Execute(Blackboard blackboard, Action onSuccess = null)
     {
         Unit target = blackboard.Get<Unit>(Blackboard.CLASS_TARGET);
@@ -71,6 +74,7 @@ public abstract class Attack : MonoBehaviour, IActionNode
     public abstract bool TryToAttack(Unit unit);
     protected virtual void PerformAttackAnimation(Vector3 targetPosition)
     {
+        AudioManager.Instance.PlaySound(m_attackAudioSettings, this.transform.position);
         m_spriteRenderer.flipX = (targetPosition - this.transform.position).normalized.x < 0;
     }
 

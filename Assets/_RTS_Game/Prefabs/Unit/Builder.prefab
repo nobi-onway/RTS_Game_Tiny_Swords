@@ -363,6 +363,8 @@ MonoBehaviour:
   target: {fileID: 0}
   m_stateSystem:
     m_value: 0
+  m_chopAudioSettings: {fileID: 11400000, guid: e6614810962a0014e97342d92dab8f33, type: 2}
+  m_buildAudioSettings: {fileID: 11400000, guid: 7ed28127010707944bd8e66d5195c3e5, type: 2}
   m_woodGatherTickTime: 1
   m_woodPerTick: 1
   m_woodCapacity: 5
@@ -387,6 +389,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2d8cacef61e0a1d45a21fd32d317c7f0, type: 2}
   m_defaultActionSO: {fileID: 11400000, guid: 2d8cacef61e0a1d45a21fd32d317c7f0, type: 2}
   m_currentActionIdx: 0
+  m_interactAudioSettings: {fileID: 11400000, guid: 48a14a420a338ad45bcf52052cdc6401, type: 2}
 --- !u!114 &6556238186652482539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,6 +402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daca309a716104bac8bc0b45149f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_walkAudioSettings: {fileID: 11400000, guid: 75168479391e8274093b7eeafe5ea259, type: 2}
 --- !u!114 &2798750599428659002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,6 +431,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_terminationAudioSettings: {fileID: 11400000, guid: 1082ef416a4f3c048b3c66f218078a67, type: 2}
   m_maxHealth: 20
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.27, b: 0.25, a: 1}

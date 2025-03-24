@@ -4,6 +4,9 @@ using UnityEngine.Events;
 
 public class BuildingUnit : Unit
 {
+    [Header("Audio")]
+    [SerializeField] private AudioSettingsSO m_placementAudioSettings;
+
     private BuildingSO m_buildingSO;
     private PlacementProcess m_placementProcess;
     private BuildingProcess m_buildingProcess;
@@ -70,11 +73,10 @@ public class BuildingUnit : Unit
 
         bool isEnoughResource = PlayerResourceManager.Instance.TryReduceResource(m_buildingSO.GoldCost, m_buildingSO.WoodCost);
 
-        Debug.Log("Is Enough Resource: " + isEnoughResource);
-
         if (!m_placementProcess.TryPlaceBuilding() || !isEnoughResource) return false;
 
         PlayerResourceManager.Instance.ReduceResource(m_buildingSO.GoldCost, m_buildingSO.WoodCost);
+        AudioManager.Instance.PlaySound(m_placementAudioSettings, this.transform.position);
 
         m_buildingProcess = new BuildingProcess(
                                                 this.transform,

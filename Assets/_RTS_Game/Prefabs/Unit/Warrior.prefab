@@ -209,6 +209,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2e207b3d1a4f18749b8290925ed5b5aa, type: 2}
   m_defaultActionSO: {fileID: 11400000, guid: c4d60d35e0ae3e746a3bd3eb8c7ff94f, type: 2}
   m_currentActionIdx: 0
+  m_interactAudioSettings: {fileID: 11400000, guid: 48a14a420a338ad45bcf52052cdc6401, type: 2}
 --- !u!114 &6251059456682057756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +222,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0daca309a716104bac8bc0b45149f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_walkAudioSettings: {fileID: 11400000, guid: 75168479391e8274093b7eeafe5ea259, type: 2}
 --- !u!114 &8599080665010330497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_terminationAudioSettings: {fileID: 11400000, guid: 1082ef416a4f3c048b3c66f218078a67, type: 2}
   m_maxHealth: 100
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4166255, b: 0.4009434, a: 1}
@@ -269,4 +272,5 @@ MonoBehaviour:
   m_damage: 3
   m_attackRange: 0.6
   m_attackCoolDownTime: 1.5
+  m_attackAudioSettings: {fileID: 11400000, guid: 94c11e18e7b880f4690d9df6e2a55e44, type: 2}
   m_attackDamageDelay: 0.6

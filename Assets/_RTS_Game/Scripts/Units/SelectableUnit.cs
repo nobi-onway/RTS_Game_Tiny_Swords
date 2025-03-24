@@ -8,6 +8,9 @@ public class SelectableUnit : MonoBehaviour
     [SerializeField] private int m_currentActionIdx;
     private SpriteRenderer m_spriteRenderer;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSettingsSO m_interactAudioSettings;
+
     private void Awake()
     {
         GeneralUtils.SetUpComponent<SpriteRenderer>(this.transform, ref m_spriteRenderer);
@@ -19,6 +22,7 @@ public class SelectableUnit : MonoBehaviour
     {
         Highlight();
 
+        AudioManager.Instance.PlaySound(m_interactAudioSettings, this.transform.position);
         UIManager.Instance.ShowActionBar(m_actionSOArray, m_currentActionIdx);
     }
 

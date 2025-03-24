@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class GameManager : MonoSingletonManager<GameManager>
 {
+    [Header("Audio")]
+    [SerializeField] private AudioSettingsSO m_backgroundAudioSettings;
+
     private Unit m_activeUnit;
     private bool m_hasActiveUnit => m_activeUnit != null;
     private BuildingUnit m_activeBuildingUnit;
@@ -42,6 +45,8 @@ public class GameManager : MonoSingletonManager<GameManager>
     {
         PlayerResourceManager.Instance.AddResource(276, 126);
         m_enemySpawner.StartUp();
+
+        AudioManager.Instance.PlayerMusic(m_backgroundAudioSettings);
     }
 
     public void PlaceActiveBuildingUnit()

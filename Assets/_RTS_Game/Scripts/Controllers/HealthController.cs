@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class HealthController : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField] private AudioSettingsSO m_terminationAudioSettings;
+
+    [Space]
     [Header("Health Information")]
     [SerializeField] private int m_maxHealth;
     [SerializeField] private int m_currentHealth;
@@ -76,5 +80,6 @@ public class HealthController : MonoBehaviour
         OnDead?.Invoke();
 
         m_animator.SetTrigger(AnimatorParameter.DEAD_TRIG);
+        AudioManager.Instance.PlaySound(m_terminationAudioSettings, this.transform.position);
     }
 }

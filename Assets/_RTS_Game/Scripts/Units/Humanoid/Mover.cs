@@ -4,6 +4,11 @@ using UnityEngine.Events;
 
 public class Mover : MonoBehaviour, IActionNode
 {
+    [Header("Audio")]
+    [SerializeField] private AudioSettingsSO m_walkAudioSettings;
+    private float m_lastFootStepTime;
+    private float m_footStepFreq = 0.3f;
+
     private AIPawn m_AIPawn;
     private Animator m_animator;
     private Vector3 m_lastPosition;
@@ -50,6 +55,12 @@ public class Mover : MonoBehaviour, IActionNode
         m_smoothSpeed = Mathf.Lerp(m_smoothSpeed, m_currentSpeed, m_smoothFactor * Time.deltaTime);
 
         m_isMoving = m_smoothSpeed > 0;
+
+        if (m_isMoving && Time.time >= m_lastFootStepTime + m_footStepFreq)
+        {
+            AudioManager.Instance.PlaySound(m_walkAudioSettings, this.transform.position);
+            m_lastFootStepTime = Time.time;
+        }
 
         m_animator.SetFloat(AnimatorParameter.SPEED_F, Mathf.Clamp01(m_smoothSpeed));
     }

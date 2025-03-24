@@ -163,3 +163,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8a38f79f1f1315244a00c7b70e6e44d2, type: 2}
   m_defaultActionSO: {fileID: 11400000, guid: 5611a2f8529c6cf488b53d4c627ebcaa, type: 2}
   m_currentActionIdx: 0
+  m_interactAudioSettings: {fileID: 11400000, guid: 2d2d2eabefd82c8429585b36e4409778, type: 2}

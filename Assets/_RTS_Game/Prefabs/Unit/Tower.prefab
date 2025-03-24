@@ -53,6 +53,7 @@ MonoBehaviour:
   target: {fileID: 0}
   m_stateSystem:
     m_value: 0
+  m_placementAudioSettings: {fileID: 11400000, guid: efb99859b3860224cacc986efb2c3bd7, type: 2}
 --- !u!70 &5955148423829012929
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -105,6 +106,7 @@ MonoBehaviour:
   m_actionSOArray: []
   m_defaultActionSO: {fileID: 0}
   m_currentActionIdx: 0
+  m_interactAudioSettings: {fileID: 0}
 --- !u!114 &7263403559304584814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,6 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae4d28099107cd046bf9fe224e8d4a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_terminationAudioSettings: {fileID: 11400000, guid: d6e51dc75dd35fe4eb3a57fbb5baa5b4, type: 2}
   m_maxHealth: 10
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
@@ -153,5 +156,6 @@ MonoBehaviour:
   m_damage: 5
   m_attackRange: 4.8
   m_attackCoolDownTime: 1
+  m_attackAudioSettings: {fileID: 11400000, guid: 9b452fda38d796d40a6b7b8409853595, type: 2}
   m_projectilePrefab: {fileID: -4054903785003771611, guid: 052d68e8aaa223c48ab57441b4f65b25, type: 3}
   m_attackTrig: 000000000100000002000000030000000400000005000000

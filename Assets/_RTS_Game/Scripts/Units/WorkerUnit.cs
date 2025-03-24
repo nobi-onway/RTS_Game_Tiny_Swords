@@ -1,9 +1,13 @@
-using System;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class WorkerUnit : HumanoidUnit
 {
+    [Header("Audio")]
+    [SerializeField] private AudioSettingsSO m_chopAudioSettings;
+    [SerializeField] private AudioSettingsSO m_buildAudioSettings;
+    private float m_lastBuildTime;
+    private float m_buildFreq = 0.7f;
+
     [SerializeField] private float m_woodGatherTickTime = 1.0f;
     [SerializeField] private int m_woodPerTick = 1;
 
@@ -99,6 +103,13 @@ public class WorkerUnit : HumanoidUnit
         if (m_stateSystem.IsCurrentValue(EUnitState.BUILDING))
         {
             m_targetBuilding?.UpdateBuildingProgress(Time.fixedDeltaTime);
+
+            if (Time.time >= m_lastBuildTime + m_buildFreq)
+            {
+                AudioManager.Instance.PlaySound(m_buildAudioSettings, this.transform.position);
+                m_lastBuildTime = Time.time;
+            }
+
             return;
         }
 
@@ -200,6 +211,8 @@ public class WorkerUnit : HumanoidUnit
         spriteRenderer.flipX = direction.x < 0;
 
         m_targetTree?.TakeHitFrom(direction);
+
+        AudioManager.Instance.PlaySound(m_chopAudioSettings, this.transform.position);
     }
 
     protected override void HandleOnScanned(Unit unit)
