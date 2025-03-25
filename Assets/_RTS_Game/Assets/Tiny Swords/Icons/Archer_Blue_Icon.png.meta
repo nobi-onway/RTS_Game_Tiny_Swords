@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Archer_Blue_Icon_0: -6267725191955626604
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

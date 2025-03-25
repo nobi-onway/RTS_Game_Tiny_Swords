@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Pawn_Blue_Icon_0: 518637680476007102
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
