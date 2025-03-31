@@ -41,10 +41,10 @@ public class UIManager : MonoSingletonManager<UIManager>
         m_actionBar.Show(actions, curActionIdx);
     }
 
-    public void ShowConfirmationBar(int goldCost, int woodCost, UnityAction onConfirm = null, UnityAction onCancel = null)
+    public void ShowConfirmationBar(int goldCost, int woodCost, string description, UnityAction onConfirm = null, UnityAction onCancel = null)
     {
-        m_confirmationBar.SetUpHooks(onConfirm, onCancel);
-        m_confirmationBar.Show(goldCost, woodCost);
+        // m_confirmationBar.SetUpHooks(onConfirm, onCancel);
+        m_confirmationBar.Show(goldCost, woodCost, description, onConfirm, onCancel);
     }
 
     public void HideConfirmationBar()

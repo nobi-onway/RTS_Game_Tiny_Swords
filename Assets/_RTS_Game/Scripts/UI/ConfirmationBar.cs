@@ -7,9 +7,13 @@ public class ConfirmationBar : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI m_goldValueTMP;
     [SerializeField] private TextMeshProUGUI m_woodValueTMP;
+    [SerializeField] private TextMeshProUGUI m_descriptionTMP;
     [SerializeField] private RectTransform m_confirmationButtons;
     [SerializeField] private Button m_confirmButton;
     [SerializeField] private Button m_cancelButton;
+
+    [SerializeField] private Color m_availableColor;
+    [SerializeField] private Color m_nonAvailableColor;
     private bool m_isShowing = false;
     private int m_reqGold, m_reqWood;
     private UnityAction OnConfirm;
@@ -19,8 +23,8 @@ public class ConfirmationBar : MonoBehaviour
     {
         PlayerResourceManager.Instance.OnResourceChange += HandlePlayerResourceChange;
 
-        m_confirmButton.onClick.AddListener(OnConfirm);
-        m_cancelButton.onClick.AddListener(OnCancel);
+        m_confirmButton.onClick.AddListener(HandleOnConfirm);
+        m_cancelButton.onClick.AddListener(HandleOnCancel);
     }
 
     private void OnDisable()
@@ -30,26 +34,41 @@ public class ConfirmationBar : MonoBehaviour
         PlayerResourceManager.Instance.OnResourceChange -= HandlePlayerResourceChange;
     }
 
-    public void Show(int reqGold, int reqWood)
+    public void Show(int reqGold, int reqWood, string description, UnityAction onConfirm, UnityAction onCancel)
     {
         m_reqGold = reqGold;
         m_reqWood = reqWood;
 
         m_goldValueTMP.text = reqGold.ToString();
         m_woodValueTMP.text = reqWood.ToString();
+        m_descriptionTMP.text = description;
 
         m_isShowing = true;
         this.gameObject.SetActive(true);
 
         HandlePlayerResourceChange(PlayerResourceManager.Instance.Gold, PlayerResourceManager.Instance.Wood);
 
-        m_confirmationButtons.gameObject.SetActive(OnConfirm != null && OnCancel != null);
+        m_confirmationButtons.gameObject.SetActive(onConfirm != null && onCancel != null);
+
+        SetUpHooks(onConfirm, onCancel);
     }
 
     public void SetUpHooks(UnityAction onConfirm, UnityAction onCancel)
     {
-        this.OnConfirm = () => { AudioManager.Instance.PlayButtonClick(); onConfirm(); };
-        this.OnCancel = () => { AudioManager.Instance.PlayButtonClick(); onCancel(); };
+        this.OnConfirm = onConfirm;
+        this.OnCancel = onCancel;
+    }
+
+    private void HandleOnConfirm()
+    {
+        AudioManager.Instance.PlayButtonClick();
+        OnConfirm?.Invoke();
+    }
+
+    private void HandleOnCancel()
+    {
+        AudioManager.Instance.PlayButtonClick();
+        OnCancel?.Invoke();
     }
 
     private void UnsubscribeAllAction()
@@ -71,7 +90,7 @@ public class ConfirmationBar : MonoBehaviour
     {
         if (!m_isShowing) return;
 
-        m_goldValueTMP.color = gold < m_reqGold ? Color.red : Color.green;
-        m_woodValueTMP.color = wood < m_reqWood ? Color.red : Color.green;
+        m_goldValueTMP.color = gold < m_reqGold ? m_nonAvailableColor : m_availableColor;
+        m_woodValueTMP.color = wood < m_reqWood ? m_nonAvailableColor : m_availableColor;
     }
 }

@@ -15,10 +15,11 @@ MonoBehaviour:
   m_placementSprite: {fileID: 21300000, guid: 9ee0d74cfce104377afdfbacfb6ee9a2, type: 3}
   m_foundationSprite: {fileID: 21300000, guid: ee63998474fe240b29d01da401f5e462, type: 3}
   m_completionSprite: {fileID: 21300000, guid: 9ee0d74cfce104377afdfbacfb6ee9a2, type: 3}
-  m_goldCost: 100
+  m_goldCost: 60
   m_woodCost: 100
   m_buildingSize: {x: 2, y: 3}
   m_buildingOffset: {x: -1, y: 0, z: 0}
-  m_buildingTime: 1
+  m_buildingTime: 3
   m_buildingUnitPrefab: {fileID: 252579404393314171, guid: fceb461e21e07f94b91f407730a3a0d9, type: 3}
   m_constructEffectPrefab: {fileID: 711042499609720081, guid: c99be994d72ccc749887e37f9c66c5aa, type: 3}
+  m_description: Tower attacks Orcs from range.

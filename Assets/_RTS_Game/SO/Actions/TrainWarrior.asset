@@ -17,4 +17,5 @@ MonoBehaviour:
   ActionCardPrefab: {fileID: -4207950847215864489, guid: c652c8a48c2d9fc4388df1ead553b0b7, type: 3}
   m_unitPrefab: {fileID: 8761276275257789781, guid: 137e3b17d4a4c564b87008dd383ddb60, type: 3}
   m_goldCost: 20
-  m_woodCost: 20
+  m_woodCost: 30
+  m_description: Warrior fight to Orcs, defending the kingdom.

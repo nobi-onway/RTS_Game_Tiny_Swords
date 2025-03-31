@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class InputManager : MonoSingletonManager<InputManager>
 {
-    private const float PAN_SPEED = 50.0f;
+    private const float PAN_SPEED = 20.0f;
     private const float MOBILE_PAN_SPEED = 10.0f;
 
     private Vector2 m_initialTouchPosition;

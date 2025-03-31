@@ -67,7 +67,7 @@ public class GameManager : MonoSingletonManager<GameManager>
 
     private void Start()
     {
-        PlayerResourceManager.Instance.AddResource(276, 126);
+        PlayerResourceManager.Instance.AddResource(50, 50);
         m_enemySpawner.StartUp();
 
         AudioManager.Instance.PlayerMusic(m_backgroundAudioSettings);

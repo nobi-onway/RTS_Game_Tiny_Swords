@@ -7,14 +7,16 @@ public class TrainUnitActionSO : ActionSO
     [SerializeField] private Unit m_unitPrefab;
     [SerializeField] private int m_goldCost;
     [SerializeField] private int m_woodCost;
+    [SerializeField] private string m_description;
 
     public Unit UnitPrefab => m_unitPrefab;
     public int GoldCost => m_goldCost;
     public int WoodCost => m_woodCost;
+    public string Description => m_description;
 
     public override void PrepareExecute()
     {
-        UIManager.Instance.ShowConfirmationBar(GoldCost, WoodCost, FinalizeUnitTraining, UIManager.Instance.HideConfirmationBar);
+        UIManager.Instance.ShowConfirmationBar(GoldCost, WoodCost, Description, FinalizeUnitTraining, UIManager.Instance.HideConfirmationBar);
     }
 
     private void FinalizeUnitTraining()

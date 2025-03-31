@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7be40adf67e1ae48b3e209fb300bc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 1
+  m_damage: 5
   m_attackRange: 1
   m_attackCoolDownTime: 1
   m_attackAudioSettings: {fileID: 11400000, guid: 94c11e18e7b880f4690d9df6e2a55e44, type: 2}
