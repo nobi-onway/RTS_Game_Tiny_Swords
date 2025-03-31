@@ -24,6 +24,6 @@ public class BuildActionSO : ActionSO
         );
 
         GameManager.Instance.SelectNewBuildingUnit(buildingUnit);
-        UIManager.Instance.ShowConfirmationBar(m_buildingSO.GoldCost, m_buildingSO.WoodCost);
+        UIManager.Instance.ShowConfirmationBar(m_buildingSO.GoldCost, m_buildingSO.WoodCost, m_buildingSO.Description);
     }
 }

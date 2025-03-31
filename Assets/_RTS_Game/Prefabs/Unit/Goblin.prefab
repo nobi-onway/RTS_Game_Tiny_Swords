@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7be40adf67e1ae48b3e209fb300bc5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_damage: 1
+  m_damage: 2
   m_attackRange: 1
   m_attackCoolDownTime: 1.5
   m_attackAudioSettings: {fileID: 11400000, guid: 9331e865e8a20a748898a25fd701a0f7, type: 2}
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_terminationAudioSettings: {fileID: 11400000, guid: 1082ef416a4f3c048b3c66f218078a67, type: 2}
-  m_maxHealth: 10
+  m_maxHealth: 20
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4, b: 0.4, a: 1}
   m_flashDamageEffectDuration: 0.2

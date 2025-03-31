@@ -18,3 +18,4 @@ MonoBehaviour:
   m_unitPrefab: {fileID: 281380777372237470, guid: 0aeef12b5dab45b44b5c6ee7578350e6, type: 3}
   m_goldCost: 10
   m_woodCost: 10
+  m_description: Worker gathers wood, gold to support the kingdom.

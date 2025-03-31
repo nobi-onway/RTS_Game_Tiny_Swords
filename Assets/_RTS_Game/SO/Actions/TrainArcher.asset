@@ -17,4 +17,5 @@ MonoBehaviour:
   ActionCardPrefab: {fileID: -4207950847215864489, guid: c652c8a48c2d9fc4388df1ead553b0b7, type: 3}
   m_unitPrefab: {fileID: 800690772738905661, guid: 71c0c9693164234469a2d0022e70dae4, type: 3}
   m_goldCost: 30
-  m_woodCost: 30
+  m_woodCost: 50
+  m_description: Archer attacks Orcs from range.

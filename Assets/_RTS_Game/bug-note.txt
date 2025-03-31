@@ -3,4 +3,3 @@
 - offensive - defensive stance
 - explosion dynamite
 - health bar
-- brief description active unit

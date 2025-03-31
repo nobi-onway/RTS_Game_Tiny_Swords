@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+    [SerializeField] private float m_claimUp, m_claimDown, m_claimLeft, m_claimRight;
+
     private void OnEnable()
     {
         InputManager.Instance.OnPanPosition += UpdatePosition;
@@ -14,6 +16,13 @@ public class CameraController : MonoBehaviour
 
     private void UpdatePosition(Vector2 deltaPosition, float panSpeed)
     {
-        this.transform.Translate(-deltaPosition * Time.deltaTime * panSpeed);
+        Vector3 translatePos = -deltaPosition * Time.deltaTime * panSpeed;
+
+        if (translatePos.x < m_claimLeft - this.transform.position.x) translatePos.x = m_claimLeft - this.transform.position.x;
+        if (translatePos.x > m_claimRight - this.transform.position.x) translatePos.x = m_claimRight - this.transform.position.x;
+        if (translatePos.y < m_claimDown - this.transform.position.y) translatePos.y = m_claimDown - this.transform.position.y;
+        if (translatePos.y > m_claimUp - this.transform.position.y) translatePos.y = m_claimUp - this.transform.position.y;
+
+        this.transform.Translate(translatePos);
     }
 }
