@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_unitClass: 01000000
-  m_objectDetectionRadius: 5
+  m_objectDetectionRadius: 6.3
   m_unitDetectionCheckRate: 0.5
   Enabled: 1
 --- !u!114 &5116735101618205195
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_terminationAudioSettings: {fileID: 11400000, guid: 1082ef416a4f3c048b3c66f218078a67, type: 2}
-  m_maxHealth: 30
+  m_maxHealth: 50
   m_currentHealth: 0
   m_damageFlashColor: {r: 1, g: 0.4166255, b: 0.4009434, a: 1}
   m_flashDamageEffectDuration: 0.2
