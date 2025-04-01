@@ -22,6 +22,8 @@ public class HealthController : MonoBehaviour
         }
     }
 
+    public int MaxHealth => m_maxHealth;
+
     public event Action<int> OnHealthChange;
     public event Action OnDead;
 

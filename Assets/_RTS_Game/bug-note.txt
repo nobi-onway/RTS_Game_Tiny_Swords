@@ -2,4 +2,3 @@
 - pathfinding  
 - offensive - defensive stance
 - explosion dynamite
-- health bar
