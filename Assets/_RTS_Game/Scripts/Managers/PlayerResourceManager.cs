@@ -24,6 +24,14 @@ public class PlayerResourceManager
     public Action<int, int> OnAddResource;
     public Action<int, int> OnReduceResource;
 
+    public void ResetResource()
+    {
+        m_gold = 0;
+        m_wood = 0;
+
+        OnResourceChange?.Invoke(m_gold, m_wood);
+    }
+
     public void AddResource(int gold, int wood)
     {
         m_gold += gold;

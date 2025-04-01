@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_damage: 3
-  m_attackRange: 8
+  m_attackRange: 6
   m_attackCoolDownTime: 1
   m_attackAudioSettings: {fileID: 11400000, guid: a422ef2bb2692a64191e140cc7e6ef9e, type: 2}
   m_projectilePrefab: {fileID: -7659332870584443382, guid: 117afd34da14748428db12ea4182b19d, type: 3}

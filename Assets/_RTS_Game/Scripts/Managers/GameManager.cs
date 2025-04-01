@@ -67,6 +67,7 @@ public class GameManager : MonoSingletonManager<GameManager>
 
     private void Start()
     {
+        PlayerResourceManager.Instance.ResetResource();
         PlayerResourceManager.Instance.AddResource(50, 50);
         m_enemySpawner.StartUp();
 
